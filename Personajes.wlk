@@ -16,7 +16,7 @@ class Personaje { // clase base de personajes
   const property recolectable = false
 
   var property inventario = []
-  var indice = 0
+  var property indice = 0
   var property objetoEquipado = null
 
   method objetivoElegible ()
