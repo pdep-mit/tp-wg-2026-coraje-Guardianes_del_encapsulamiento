@@ -1,0 +1,46 @@
+cosas ya implementadas:
+
+
+ plantilla de personaje comun (faltan especializaciones)
+
+ movimiento de los personajes con limitacion de casillas basado en el alcance del personaje
+
+ capacidad de ataque de los personajes 
+
+ los personajes pueden morir y dejan de ser tomados en cuenta para el seleccionador
+
+ sistema de turnos implementado a grandes rasgos(se puede pasar turno y cada turno se reinician las capacidades de los personajes)
+
+ sistema de equipos (se pueden agregar equipos y personajes a los equipos, como tambien seleccionar a un integrante del equipo desde este)
+
+
+
+falta implementar:(los más importantes estan marcados por un *)
+
+* distintas clases de personajes(granjero y espantapajaros por ahora), todavia no es necesario que se diferencien mucho, solo que existan y tengan alguna estadistica distinta
+
+ agregar limitaciones al movimiento, principalmente que no se pueda atravesar los elementos solidos como paredes o personajes 
+
+* paredes u otros obstaculos, vallas o bloques de heno, alguno de estos deberian ser capaz de recibir daño y destruirse usando el metodo recibirdanio para aplicar polimorfismo
+
+* agregar objetos de distintos tipos, granadas, barreras desplegables, curaciones, power ups (estos pueden aumentar el ataque u otra estadistica), modelarlos parecidos para poder aplicar polimorfismo
+
+ agregar una cuadricula azul a cada una de las casillas a las que un personaje se puede mover en un momento cuando se lo tiene seleccionado
+
+ agregar cajas que contengan un objeto random 
+
+* que los personajes puedan recoger estos objetos y se lo guarden en un inventario
+
+ agregar mecanica de recorrer inventario de personaje
+
+
+* agregar mecanica de usar objetos
+
+ agregar feedback de los ataques (que se muestre en pantalla arriba del personaje atacado su vida antes y despues del ataque por un par de segundos)
+
+
+* agregar pantalla de seleccion de personajes para cada equipo: primero elige uno de los equipos cada uno de sus personajes con una rueda de seleccion
+(sale un personaje en pantalla, con una flecha arriba o abajo te muestra la siguiente clase de personaje y con enter se elige a ese personaje, luego se pasa al siguiente
+ hasta que se completen los 4 lugares del equipo, una vez completo el equipo el siguiente jugador elige su equipo de 4 personajes y al completarlo se termina la pantalla de seleccion y deberia arrancar la partida )
+
+ agregar forma de reiniciar la ronda y los personajes una vez que todos los personajes de un equipo murieron (se puede comprobar con el metodo integrantesVivos si devuelve una lista vacia)
