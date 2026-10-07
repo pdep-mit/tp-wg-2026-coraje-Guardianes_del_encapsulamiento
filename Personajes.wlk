@@ -1,5 +1,5 @@
 
-import Juego.*
+import juego.*
 import equipos.*
 import auxiliares.*
 class Personaje { // clase base de personajes

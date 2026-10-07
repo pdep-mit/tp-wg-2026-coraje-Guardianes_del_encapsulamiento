@@ -1,5 +1,5 @@
 import equipos.*
-import Juego.*
+import juego.*
 import Personajes.*
 import seleccionador.*
 object turnManager{
