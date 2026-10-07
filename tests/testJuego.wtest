@@ -1,0 +1,47 @@
+import Personajes.*
+import Items.*
+import obstaculos.*
+
+describe "Tests de Lógica de Dominio y Polimorfismo - Riego Cruzado" {
+
+  const granjero = new Granjero(position = game.at(1, 1), equipo = "Azul")
+  const heno = new BloqueDeHeno(position = game.at(2, 2), equipo = "Rojo")
+
+  test "Un personaje como una barrera responden al mensaje recibirDanio" {
+    // Ambos objetos entienden recibirDanio(cantidad) pero tienen estados y naturalezas distintas
+    granjero.recibirDanio(30)
+    heno.recibirDanio(20)
+
+    assert.equals(70, granjero.vida()) // Granjero base 100 - 30 = 70
+    assert.equals(30, heno.vida())     // BloqueDeHeno base 50 - 20 = 30
+  }
+
+  test "Un Consumible cura vida al usarse" {
+    granjero.recibirDanio(40) // Vida baja de 100 a 60
+    
+    const pocion = new Consumible(nombre = "Churrasco", calidad = 1, usabilidad = 1, recuperacion = 25)
+    pocion.duenio(granjero)
+    granjero.objetoEquipado(pocion)
+
+    granjero.usarObjeto()
+
+    assert.equals(85, granjero.vida()) // 60 + 25 = 85
+    assert.equals(null, granjero.objetoEquipado())
+  }
+
+  test "Un PowerUp incrementa atributos mediante bloques de mejora" {
+    const mejoraDanio = new PowerUp(
+      nombre = "MejoraAtaque",
+      calidad = 2,
+      mejora = 15,
+      aplicarMejora = { personaje, valor => personaje.ataque(personaje.ataque() + valor) }
+    )
+    mejoraDanio.duenio(granjero)
+    granjero.objetoEquipado(mejoraDanio)
+
+    granjero.usarObjeto()
+
+    assert.equals(40, granjero.ataque()) // Granjero ataque base 25 + 15 = 40
+    assert.equals(null, granjero.objetoEquipado())
+  }
+}
