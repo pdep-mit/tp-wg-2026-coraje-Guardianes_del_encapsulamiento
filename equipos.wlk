@@ -1,3 +1,5 @@
+import auxiliares.*
+
 class Equipo {
   var property integrantes = []
   var property indice = 0 
@@ -14,14 +16,8 @@ class Equipo {
   method recorrerIntegrantes(equipo)  {  // recorre la lista de integrantes vivos del equipo dando la vuelta al primer integrante cuando ya no hay más
     const vivos = self.integrantesVivos(equipo) // tomamos solo los integrantes activos 
 
-    if (indice < vivos.size()-1){   
-      indice += 1  
-      return equipo.get(indice)
-    } else
-     { indice = 0
-      return vivos.get(indice)  }   
-  }
-}
+   return auxiliar.recorrerLista(vivos,self)
+}}
 
 
 object managerDeEquipos {
@@ -31,12 +27,7 @@ object managerDeEquipos {
     equipos.add(equipoNuevo)
 }
   method recorrerEquipos (){ // recorre la lista de equipos y vuelve al primer equipo cuando no hay más
-    if (indice < equipos.size()-1){
-     indice += 1
-     return equipos.get(indice)
-     } else{
-      indice = 0
-      return equipos.get(indice)}
+   return auxiliar.recorrerLista(equipos,self)
 }
 
 }

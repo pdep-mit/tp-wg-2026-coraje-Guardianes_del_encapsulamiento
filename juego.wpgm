@@ -1,8 +1,9 @@
+import cajas.*
 import wollok.game.*
 import Personajes.*
 import equipos.*
 import ManagerDeTurnos.*
-
+import seleccionador.*
 
 program jueguito {
   game.width(16)
@@ -10,25 +11,25 @@ program jueguito {
   game.cellSize(32)
   game.title("Juego")
  
-  const hombre = new HombreCalabaza(position = game.center().up(4),equipo = "Azul",vida = 100, ataque = 25, alcance = 3)
-  const hombre1 = new HombreCalabaza(position = game.center().left(5),equipo = "Azul",vida = 100, ataque = 25, alcance = 3)
-  const hombre2 = new HombreCalabaza(position = game.center().right(2),equipo ="Rojo",vida = 100, ataque = 25, alcance = 7)
-  const hombre3 = new HombreCalabaza(position = game.center().left(2),equipo = "Rojo",vida = 100, ataque = 25, alcance = 3) // creamos los personajes
+  const hombre = new HombreCalabaza(position = game.center().up(4),equipo = "Azul")
+  const hombre1 = new HombreCalabaza(position = game.center().left(5),equipo = "Azul")
+  const granjero = new Granjero(position = game.center().right(2),equipo ="Rojo")
+  const vaca = new VacaMedico(position = game.center().left(2),equipo = "Rojo") // creamos los personajes
   const equipoAzul = new Equipo() 
   const equipoRojo = new Equipo()  // creamos los equipos
   managerDeEquipos.agregarEquipo(equipoAzul)
   managerDeEquipos.agregarEquipo(equipoRojo)  // añadimos los equipos a la lista de equipos
   equipoAzul.agregarPersonajeaEquipo(hombre)
   equipoAzul.agregarPersonajeaEquipo(hombre1)
-  equipoRojo.agregarPersonajeaEquipo(hombre2)
-  equipoRojo.agregarPersonajeaEquipo(hombre3)   // añadimos los personajes a los equipos
+  equipoRojo.agregarPersonajeaEquipo(vaca)
+  equipoRojo.agregarPersonajeaEquipo(granjero)   // añadimos los personajes a los equipos
   seleccionador.huesped(hombre)   // establecemos un huesped para el seleccionador 
   turnManager.inicioDeTurno(equipoAzul) // inicializamos el turno para el equipo azul
   
   game.addVisual(hombre)
   game.addVisual(hombre1)
-  game.addVisual(hombre2)
-  game.addVisual(hombre3)
+  game.addVisual(vaca)
+  game.addVisual(granjero)
   game.addVisual(seleccionador)  // añadimos los visuales
   
   keyboard.left().onPressDo({seleccionador.mover(seleccionador.position().left(1))})
@@ -39,6 +40,14 @@ program jueguito {
   keyboard.enter().onPressDo({seleccionador.accionContextual()}) // dependiendo el contexto decide que accion realizar
 
   keyboard.alt().onPressDo({seleccionador.cambioDeHuesped(turnManager.turnoDe().recorrerIntegrantes(turnManager.turnoDe().integrantes()))}) // cambio de huesped del seleccionador
+
+  keyboard.i().onPressDo({seleccionador.huesped().recorrerInventario()})
+
+  keyboard.o().onPressDo({seleccionador.huesped().equiparObjeto()})
+
+  keyboard.u().onPressDo({seleccionador.huesped().usarObjeto()})
+
+  keyboard.c().onPressDo({generadorDeCajas.generarCaja()})
 
   keyboard.num0().onPressDo({turnManager.pasoDeTurno()}) // pasamos turno de un equipo a otro
   game.start()

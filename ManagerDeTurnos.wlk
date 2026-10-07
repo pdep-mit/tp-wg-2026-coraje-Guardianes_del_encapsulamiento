@@ -1,6 +1,7 @@
 import equipos.*
 import Juego.*
 import Personajes.*
+import seleccionador.*
 object turnManager{
  
    var turno = 1
@@ -25,11 +26,11 @@ object turnManager{
    self.inicioDeTurno(managerDeEquipos.recorrerEquipos()) // empieza el turno del siguiente equipo
 
    turno += 1
+   game.say(seleccionador,"turno:" + turno)
   }
   method turnoDe()
     {
      return managerDeEquipos.equipos().find({equipo => equipo.turnoActivo() }) // se busca en la lista de equipos el equipo que está activo en el turno
-
     }
 
 

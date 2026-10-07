@@ -1,6 +1,7 @@
 
 import Juego.*
 import equipos.*
+import auxiliares.*
 class Personaje { // clase base de personajes
  
   var property position 
@@ -12,8 +13,11 @@ class Personaje { // clase base de personajes
   var property alcance
   var property vivo = true
   const property solido = true
+  const property recolectable = false
 
-  
+  var property inventario = []
+  var indice = 0
+  var property objetoEquipado = null
 
   method objetivoElegible ()
   {
@@ -31,24 +35,53 @@ class Personaje { // clase base de personajes
     objetivo.recibirDanio(ataque)
     puedeAtacar = false // gasta el ataque del turno
    }}
-
+  
   
    method recibirDanio (danio){ // reduce la vida en una cantidad de daño y en caso de reducir la vida  
      vida -= danio
+     game.say(self,"vida:" + self.vida())
      if (vida <= 0){
+
         self.muerte()
-     }
-  }
+     }}
 
   method muerte (){ 
+    game.say(self,  "ha muerto")
     game.removeVisual(self)
     vivo = false
+    
   }
+  
+  method agregarItemAlInventario(item){
+     inventario.add(item)
+     game.say(self,"consegui un:" + item)
+     item.duenio(self)
+  }
+
+  method recorrerInventario() {return auxiliar.recorrerLista(inventario,self)}
+  
+
+  method recolectarAlgo(recompensa)  { self.agregarItemAlInventario(recompensa.generarRecompensa())}
+  
+  method equiparObjeto() 
+   {objetoEquipado = inventario.get(indice)
+     game.say(self,"me equipe con:" + objetoEquipado)}
+  
+
+  method usarObjeto(){objetoEquipado.usarItem()}
+
+  method gastarItem(){
+    objetoEquipado = null
+    inventario.remove(indice)
+    indice = 0 
+  }
+
 
 }
 
-class HombreCalabaza inherits Personaje { // clase de personaje, faltan agregar habilidades y cosas que lo diferencien
+class HombreCalabaza inherits Personaje (vida = 150, ataque = 30, alcance = 3) { // clase de personaje, faltan agregar habilidades y cosas que lo diferencien
  
+
  method image () { // decide la imagen del personaje dependiendo del equipo que es (probablemente haya que cambiarlo)
   if (equipo == "Azul"){
     return "Hombre_calabaza_Azul.png"
@@ -56,41 +89,35 @@ class HombreCalabaza inherits Personaje { // clase de personaje, faltan agregar 
  }
 }
 
+class Granjero inherits Personaje (vida = 100, ataque = 25, alcance = 4) {
+
+ method image () {
+  if (equipo == "Azul"){
+    return "Granjero_Azul.png"
+  } else return "Granjero_Rojo.png"
+ }
 
 
-
-
-object seleccionador { 
-  
-  var property huesped = null
-  const property solido = false
-  var property position = game.center()
-  const property objetivoElegible = false
-
-  method mover(nuevaPosicion) { // mueve al seleccionador en una zona definida por un rombo con centro en el huesped
-    if ((nuevaPosicion.x()  -huesped.position().x()).abs() + (nuevaPosicion.y() - huesped.position().y()).abs()  <= huesped.alcance() ) 
-    { position = nuevaPosicion  }}
- 
-  
-  method cambioDeHuesped (nuevoHuesped){  // cambia al huesped del seleccionador por otro
-     huesped = nuevoHuesped
-     position = nuevoHuesped.position()
-  }
-
-  method accionContextual() // decide que accion tomar dependiendo de varios factores(por ahora solo si hay un enemigo o no)
-  {if (self.hayUnObjetivo(self.position()))  {self.seleccionarObjetivoDeAtaque()
-  } else {self.moverHuesped()} 
-  }
-
-  method moverHuesped() =  self.huesped().mover(self.position()) // mueve al huesped a la posicion del seleccionador
-  
-
-  method hayUnObjetivo(posicion)  {return game.getObjectsIn(posicion).any({objeto=>objeto.objetivoElegible() })} // busca un objetivo elegible en la posicion del seleccionador
-  
-
-  method seleccionarObjetivoDeAtaque ()= self.huesped().atacar(game.getObjectsIn(self.position()).find({objeto => objeto.objetivoElegible()})) // manda al huesped a atacar al objetivo
-  
-
-  method image() = "Seleccionador.png"   
 }
+
+class EspantaPajaros inherits Personaje (vida = 80, ataque = 40, alcance = 6){
+ method image () {
+   if (equipo == "Azul"){
+    return "espantaPajaros_Azul.png"
+  } else return "espantaPajaros_rojo.png"
+ }
+}
+
+class VacaMedico inherits Personaje (vida = 100, ataque = 20, alcance = 3 ) {
+  
+  method image( ){
+   if (equipo == "Azul"){
+    return "Vaca_Medico_Azul.png"
+  } else return "Vaca_Medico_Rojo.png"
+  }
+}
+
+
+
+
 
