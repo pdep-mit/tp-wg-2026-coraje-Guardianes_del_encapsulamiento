@@ -71,9 +71,9 @@ class Personaje { // clase base de personajes
   method usarObjeto(){objetoEquipado.usarItem()}
 
   method gastarItem(){
+    inventario.remove(objetoEquipado)
     objetoEquipado = null
-    inventario.remove(indice)
-    indice = 0 
+    indice = 0
   }
 
 
