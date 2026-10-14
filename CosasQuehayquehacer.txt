@@ -1,46 +1,64 @@
-cosas ya implementadas:
-
-
- plantilla de personaje comun (faltan especializaciones)
-
- movimiento de los personajes con limitacion de casillas basado en el alcance del personaje
-
- capacidad de ataque de los personajes 
-
- los personajes pueden morir y dejan de ser tomados en cuenta para el seleccionador
-
- sistema de turnos implementado a grandes rasgos(se puede pasar turno y cada turno se reinician las capacidades de los personajes)
-
- sistema de equipos (se pueden agregar equipos y personajes a los equipos, como tambien seleccionar a un integrante del equipo desde este)
 
 
 
-falta implementar:(los más importantes estan marcados por un *)
 
-* distintas clases de personajes(granjero y espantapajaros por ahora), todavia no es necesario que se diferencien mucho, solo que existan y tengan alguna estadistica distinta
+ objetivo principal: Que se pueda completar una partida completa
 
- agregar limitaciones al movimiento, principalmente que no se pueda atravesar los elementos solidos como paredes o personajes 
+ * agregar forma de cambiar de ronda (reiniciar a los personajes a sus posiciones iniciales una vez que un equipo entero haya muerto, sumar la ronda al equipo ganador)
 
-* paredes u otros obstaculos, vallas o bloques de heno, alguno de estos deberian ser capaz de recibir daño y destruirse usando el metodo recibirdanio para aplicar polimorfismo
+  agregar feedback visual de cuantas rondas ganadas tiene un equipo
 
-* agregar objetos de distintos tipos, granadas, barreras desplegables, curaciones, power ups (estos pueden aumentar el ataque u otra estadistica), modelarlos parecidos para poder aplicar polimorfismo
+ * despues de que un equipo gane una cantidad de rondas (pueden ser 3 rondas) que se ejecute un evento en el que se muestre el equipo que ganò y termine la partida
 
- agregar una cuadricula azul a cada una de las casillas a las que un personaje se puede mover en un momento cuando se lo tiene seleccionado
+  agregar assets de decoracion, fondos, paredes 
 
- agregar cajas que contengan un objeto random 
+ * limitar el movimiento a la pantalla visible
 
-* que los personajes puedan recoger estos objetos y se lo guarden en un inventario
+ * crear un mapa basico en el que haya distintas estructuras de coberturas y zonas de recompensa
 
- agregar mecanica de recorrer inventario de personaje
-
-
-* agregar mecanica de usar objetos
-
- agregar feedback de los ataques (que se muestre en pantalla arriba del personaje atacado su vida antes y despues del ataque por un par de segundos)
+  agregar un generador de cajas que vaya generando cajas en distintas zonas del mapa a lo largo de la partida (puede ser cada turno o randomizado) 
 
 
-* agregar pantalla de seleccion de personajes para cada equipo: primero elige uno de los equipos cada uno de sus personajes con una rueda de seleccion
+
+
+ mecanicas/contenido que hay que implementar:
+
+ * agregar limitaciones al movimiento, principalmente que no se pueda atravesar los elementos solidos como paredes o personajes 
+
+ cambiar implementacion del alcance, diferenciar entre alcance de movimiento y alcance de ataque(la idea es que se pueda atacar más lejos que lo que se puede mover)
+
+ (Experimental) agregar sistema de acierto y fallos al atacar, de forma que cuanto más cerca estes de un enemigo más probable sea que aciertes, ejemplo a 1 casilla hay un 90% de acierto, a 3 casillas hay un 70%, a 5 casillas hay un 40 % ,etc 
+
+ * agregar una cuadricula azul a cada una de las casillas a las que un personaje se puede mover en un momento cuando se lo tiene seleccionado
+ 
+ ** remodelar las clases de personajes, hacer una subclase de Personaje por cada tipo de personaje (Tanque, soldado, sniper, medico), y despues hacer subclases de estos tipos (por ejemplo hombreCalabaza seria un tanque, pero podriamos agregar otro personaje que sea un tanque con otras estadisticas y otra habilidad) 
+
+ * distinguir a las subclases (tanque,medico,etc) con alguna habilidad activa para cada uno y a cada personaje con otra habilidad extra, estas habilidades deberian tener un cooldown de varios turnos dependiendo de la fuerza de la habilidad (2 turnos una habilidad no muy fuerte, 4 para una habilidad que sea muy buena)
+ 
+----Ejemplos de habilidades que se podrian incluir:
+
+ para el tanque la habilidad de su clase podria ser reducir el daño recibido a la mitad el siguiente turno, teniendo ademas el hombreCalabaza la habilidad de realizar un ataque a una casilla que cause el doble de su daño, otro tanque distinto podria por ejemplo tener la habilidad de reducir el daño recibido por sus compañeros en un radio de 3 casillas
+
+ para el medico su habilidad principal seria la de curar a un compañero a una distancia de 2 casillas o menos, y la vaca Medico podria tener la habilidad de mejorar el ataque de un compañero por un turno, mientras que otro medico podria por ejemplo tener la habilidad de envenenar a un enemigo reduciendole el ataque y bajandole vida cada turno
+
+para el soldado su habilidad podria ser aumentar su capacidad de movimiento en 2 o 3 casillas por un turno, el granjero podria tener alguna habilidad de cultivar una planta que sea una torreta o algo parecido, mientra que otro soldado podria tener la habilidad de atacar a 2 objetivos distintos dividiendo el ataque
+
+para el sniper su habilidad podria ser la capacidad de aumentar su precision a largas distancias(esto si agregamos el sistema experimental de ataque) por un turno, el espantapajaros podria tener la habilidad de invocar un cuervo que se mueva y ataque a sus enemigos, y otro sniper podria tener la habilidad de colocar una barrera que le permita aumentar su rango de ataque al estar adyacente
+
+
+
+** remodelar las clases de items para utilizar más herencia, por ejemplo la clase de barrerasdesplegables podria ser una subclase de colocables, y otras subclases de colocables podria ser por ejemplo plantas que hagan distintas cosas (curar, torretas, etc), podriamos unificar de alguna forma las curaciones con los power ups y que ambos sean subclases de consumibles, las granadas deberian ser una subclase de lanzables y deberiamos agregar algun tipo de lanzable distinto, por ejemplo podrian ser distintas pociones arrojables que causen distintos efectos(curaciones, venenos, fuego, etc)  
+
+*agregar más variedad de items, por lo menos tratar de tener 3 variantes de cada subclase de item
+
+agregar más barreras y obstaculos
+
+*(si se puede) agregar pantalla de seleccion de personajes para cada equipo: primero elige uno de los equipos cada uno de sus personajes con una rueda de seleccion
 (sale un personaje en pantalla, con una flecha arriba o abajo te muestra la siguiente clase de personaje y con enter se elige a ese personaje, luego se pasa al siguiente
  hasta que se completen los 4 lugares del equipo, una vez completo el equipo el siguiente jugador elige su equipo de 4 personajes y al completarlo se termina la pantalla de seleccion y deberia arrancar la partida )
 
- agregar forma de reiniciar la ronda y los personajes una vez que todos los personajes de un equipo murieron (se puede comprobar con el metodo integrantesVivos si devuelve una lista vacia)
+agregar feedback del inventario, idealmente poder mostrar los objetos que tengas equipado
+
+agregar forma de ver las estadisticas de un personaje al poner el seleccionador encima, principalmente la vida y el ataque
+
+
