@@ -68,7 +68,13 @@ class Personaje { // clase base de personajes
      game.say(self,"me equipe con:" + objetoEquipado)}
   
 
-  method usarObjeto(){objetoEquipado.usarItem()}
+  method usarItem() {
+    if (objetoEquipado != null) {
+        objetoEquipado.usarItem()
+    } else {
+        game.say(self, "No tengo nada equipado")
+    }
+  }
 
   method gastarItem(){
     inventario.remove(objetoEquipado)
