@@ -76,7 +76,7 @@ class Personaje { // clase base de personajes
     indice = 0
   }
 
-
+  method curar(cantidad) { vida += cantidad }
 }
 
 class HombreCalabaza inherits Personaje (vida = 150, ataque = 30, alcance = 3) { // clase de personaje, faltan agregar habilidades y cosas que lo diferencien

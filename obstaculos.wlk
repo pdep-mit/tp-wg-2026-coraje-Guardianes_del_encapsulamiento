@@ -26,4 +26,5 @@ class BloqueDeHeno inherits Barrera (vida = 50) {
 
   method image() = "bloque_De_Heno.png"
    
+  method curar(cantidad) { }
 }
