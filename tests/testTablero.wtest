@@ -1,0 +1,53 @@
+import Personajes.*
+import Items.*
+import obstaculos.*
+import seleccionador.*
+
+describe "Items sobre el tablero" {
+  const lanzador = new Granjero(position = game.at(1, 1), equipo = "Azul")
+  const enemigo = new HombreCalabaza(position = game.at(3, 3), equipo = "Rojo")
+  const lejano = new VacaMedico(position = game.at(9, 9), equipo = "Rojo")
+
+  method prepararTablero() {
+    game.addVisual(lanzador)
+    game.addVisual(enemigo)
+    game.addVisual(lejano)
+    game.addVisual(seleccionador)
+    seleccionador.cambioDeHuesped(lanzador)
+    seleccionador.position(game.at(3, 3))
+  }
+
+  test "Una Granada daña solo a lo que está dentro del área" {
+    self.prepararTablero()
+    const granada = new Granada(nombre = "G", usabilidad = 1, calidad = 1, area = 1, danio = 30)
+    granada.duenio(lanzador)
+    lanzador.objetoEquipado(granada)
+    lanzador.usarObjeto()
+    assert.equals(120, enemigo.vida())
+    assert.equals(100, lejano.vida())
+  }
+
+  test "Una PocionCuracion cura a los afectados" {
+    self.prepararTablero()
+    enemigo.recibirDanio(50)
+    const pocion = new PocionCuracion(nombre = "P", usabilidad = 1, calidad = 1, area = 1, cantidad = 20)
+    pocion.duenio(lanzador)
+    lanzador.objetoEquipado(pocion)
+    lanzador.usarObjeto()
+    assert.equals(120, enemigo.vida())
+  }
+
+  test "Una BarreraDesplegable se coloca en casilla libre y no sobre un solido" {
+    self.prepararTablero()
+    seleccionador.position(game.at(5, 5))
+    const barrera = new BarreraDesplegable(nombre = "B", usabilidad = 2, calidad = 1,
+      fabrica = { posicion, equipo => new BloqueDeHeno(position = posicion, equipo = equipo) })
+    barrera.duenio(lanzador)
+    lanzador.objetoEquipado(barrera)
+    lanzador.usarObjeto()
+    assert.equals(1, barrera.usabilidad())
+    assert.that(game.getObjectsIn(game.at(5, 5)).any({ o => o.solido() }))
+    lanzador.usarObjeto() // casilla ocupada: no debe gastar el uso
+    assert.equals(1, barrera.usabilidad())
+  }
+}

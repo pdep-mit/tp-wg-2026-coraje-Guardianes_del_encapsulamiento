@@ -1,0 +1,72 @@
+import Personajes.*
+import Items.*
+
+describe "Tests de items: herencia y polimorfismo" {
+
+  // Granjero base: vida 100, ataque 25, alcance 4
+  const granjero = new Granjero(position = game.at(1, 1), equipo = "Azul")
+
+  test "Una Curacion cura a su dueño" {
+    granjero.recibirDanio(40)
+    const churrasco = new Curacion(nombre = "Churrasco", calidad = 1, usabilidad = 1, cantidad = 25)
+    churrasco.duenio(granjero)
+    granjero.objetoEquipado(churrasco)
+
+    granjero.usarObjeto()
+
+    assert.equals(85, granjero.vida())
+    assert.equals(null, granjero.objetoEquipado())
+  }
+
+  test "Un item con varios usos recién se gasta al agotarlos" {
+    const mate = new Curacion(nombre = "Mate", calidad = 1, usabilidad = 2, cantidad = 10)
+    mate.duenio(granjero)
+    granjero.objetoEquipado(mate)
+
+    granjero.usarObjeto()
+    assert.equals(1, mate.usabilidad())
+    assert.equals(mate, granjero.objetoEquipado())
+
+    granjero.usarObjeto()
+    assert.equals(null, granjero.objetoEquipado())
+  }
+
+  test "Los PowerUp mejoran distintos atributos con la misma interfaz" {
+    const powerUps = [
+      new MejoraAtaque(nombre = "MejoraAtaque", calidad = 1, mejora = 10),
+      new MejoraAlcance(nombre = "MejoraAlcance", calidad = 1, mejora = 1),
+      new MejoraVida(nombre = "MejoraVida", calidad = 1, mejora = 30)
+    ]
+
+    powerUps.forEach({ powerUp =>
+      powerUp.duenio(granjero)
+      granjero.objetoEquipado(powerUp)
+      granjero.usarObjeto()
+    })
+
+    assert.equals(35, granjero.ataque())
+    assert.equals(5, granjero.alcance())
+    assert.equals(130, granjero.vida())
+  }
+
+  test "Consumibles de distinta clase son polimórficos para el personaje" {
+    granjero.recibirDanio(20) // vida 80
+    const consumibles = [
+      new Curacion(nombre = "Botiquin", calidad = 1, usabilidad = 1, cantidad = 10),
+      new MejoraAtaque(nombre = "MejoraAtaque", calidad = 1, mejora = 5)
+    ]
+
+    consumibles.forEach({ consumible =>
+      consumible.duenio(granjero)
+      granjero.objetoEquipado(consumible)
+      granjero.usarObjeto()
+    })
+
+    assert.equals(90, granjero.vida())
+    assert.equals(30, granjero.ataque())
+  }
+
+  // PENDIENTE: tests de Lanzable (Granada / PocionCuracion) y Colocable.
+  // Dependen del tablero (game.addVisual + seleccionador), conviene armarlos
+  // una vez que el equipo defina cómo se inicializa el tablero en los tests.
+}
