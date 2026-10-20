@@ -1,119 +1,183 @@
-import seleccionador.*
 import Personajes.*
 import obstaculos.*
+import seleccionador.*
+
 class Items {
   var property usabilidad  
   var property duenio = null 
   var property calidad
   var property nombre
+  //usar item
+  method efecto()
+  //Cuando se puede usar
+  method puedeUsarse() = true
+  //mensaje
+  method mensajeDeUso() = "usaste " + nombre
+  //objetivo
+  method posicionObjetivo() = seleccionador.position()
   
-
-
+  method usarItem() {
+    if (self.puedeUsarse()) {
+      usabilidad -= 1
+      self.efecto()
+      console.println(self.mensajeDeUso())
+      if (usabilidad <= 0) {
+        duenio.gastarItem()
+      }
+    }
+}
 }
 
+//LANZABLES
 class Lanzable inherits Items () {
-   var property danio
    var property area
   
-   method efecto() 
-   {
-      self.encontrarAfectados().forEach({afectado => afectado.recibirDanio(danio)  })
-   }
+   method aplicarEfectoA(afectado)
 
-   method usarItem (){ usabilidad -= 1
-        self.efecto()
-        console.println("lanzaste una granada")
-        if(usabilidad == 0){
-         duenio.gastarItem()
-        }}
-
-   method encontrarAfectados (){
-    
-    const posicionesARevisar = self.casillasARevisar()
-    const afectados = []
-     posicionesARevisar.forEach({casilla => game.getObjectsIn(casilla).forEach({objeto=>if (objeto.objetivoElegible()){afectados.add(objeto)}})})
-       return afectados
-   } 
-   method casillasARevisar (){
-   const casillas = []
-        (-area..area).forEach({ coordenada_x => (-area..area).forEach({ coordenada_y =>   if (coordenada_x.abs() + coordenada_y.abs() <= area){ casillas.add(game.at(seleccionador.position().x() + coordenada_x, seleccionador.position().y() + coordenada_y))}})})
-          return casillas}
-       
-}
-
-
-
-
-class BarreraDesplegable inherits Items () {
-    const property crearBarrera
-
-    method efecto(){
-       const barrera = crearBarrera.apply(seleccionador.position())
-       game.addVisual(barrera)  
-       console.println("colocaste una barrera")
-       }  
-       
-    method usarItem (){
-         if(not game.getObjectsIn(seleccionador.position()).any({objeto => objeto.solido()})){
-        usabilidad -= 1
-        self.efecto()
-        if(usabilidad == 0){
-         duenio.gastarItem()
-        }}}
-}
-
-class Consumible inherits Items () 
-{
-  const recuperacion
-  
-  
-  method usarItem (){
-        usabilidad -= 1
-        self.efecto()
-        console.println("Te curaste")
-        if(usabilidad == 0){
-         duenio.gastarItem()
-        }
+   override method efecto() {
+    self.encontrarAfectados().forEach({ afectado => self.aplicarEfectoA(afectado) })
   }
-  method efecto() 
-   {
-      duenio.vida(duenio.vida() + recuperacion) 
-   }
+
+   override method mensajeDeUso() = "lanzaste " + nombre
+
+  method encontrarAfectados() {
+    const afectados = []
+    self.casillasAfectadas().forEach({ casilla =>
+      game.getObjectsIn(casilla).forEach({ objeto =>
+        if (objeto.objetivoElegible()) {
+          afectados.add(objeto)
+        }
+      })
+    })
+    return afectados
+  }
+
+  method casillasAfectadas() {
+    const centro = self.posicionObjetivo()
+    const rango = (-area..area)
+    const casillas = []
+    rango.forEach({ dx =>
+      rango.forEach({ dy =>
+        if (dx.abs() + dy.abs() <= area) {
+          casillas.add(game.at(centro.x() + dx, centro.y() + dy))
+        }
+      })
+    })
+    return casillas
+  }
 }
 
-class PowerUp inherits Items (usabilidad = 1) {
-  const property aplicarMejora
+class Granada inherits Lanzable {
+  const property danio
+
+  override method aplicarEfectoA(afectado) {
+    afectado.recibirDanio(danio)
+  }
+}
+
+class PocionCuracion inherits Lanzable {
+  const property cantidad
+
+  override method aplicarEfectoA(afectado) {
+    afectado.curar(cantidad)
+  }
+}
+
+
+//COLOCABLES
+
+class Colocable inherits Items {
+  method crearElemento(posicion)
+
+  // Redefinición del gancho: solo se puede colocar en una casilla sin nada sólido.
+  override method puedeUsarse() =
+    not game.getObjectsIn(self.posicionObjetivo()).any({ objeto => objeto.solido() })
+
+  override method efecto() {
+    game.addVisual(self.crearElemento(self.posicionObjetivo()))
+  }
+
+  override method mensajeDeUso() = "colocaste " + nombre
+}
+
+class BarreraDesplegable inherits Colocable {
+ //Que tipo debarrera se crea
+  const property fabrica
+
+  override method crearElemento(posicion) = fabrica.apply(posicion, duenio.equipo())
+}
+
+//Consumibles
+class Consumible inherits Items {
+  method aplicarA(personaje)
+
+  override method efecto() {
+    self.aplicarA(duenio)
+  }
+}
+class Curacion inherits Consumible {
+  const property cantidad
+
+  override method aplicarA(personaje) {
+    personaje.curar(cantidad)
+  }
+
+  override method mensajeDeUso() = "te curaste con " + nombre
+}
+
+class PowerUp inherits Consumible(usabilidad = 1) {
   const property mejora
 
-  method usarItem (){
-    self.efecto()
-    duenio.gastarItem()
-    console.println("Te mejoraste")
-  }
-   method efecto(){
-    aplicarMejora.apply(duenio,mejora)
-   }
+  override method mensajeDeUso() = "te mejoraste con " + nombre
 }
 
-
-object generadorDeItems {
-  
-  
-  const generadores = [
-        { new PowerUp(nombre = "mejoraAtaque", calidad = 3, aplicarMejora = { personaje, valor => personaje.ataque(personaje.ataque() + valor) }, mejora = 10) },
-        { new PowerUp(nombre = "mejoraAlcance" ,calidad = 3, aplicarMejora = { personaje, valor => personaje.alcance(personaje.alcance() + valor) }, mejora = 1) },
-        { new Lanzable(nombre = "GranadaMazorca",usabilidad = 1, calidad = 4, area = 2, danio = 200) },
-        { new Lanzable(nombre = "GranadaCereza",usabilidad = 1, calidad = 2, area = 3, danio = 25) },
-        { new BarreraDesplegable(nombre = "BarreraDeHeno" , usabilidad = 2, calidad = 1, crearBarrera = { posicion => new BloqueDeHeno(position = posicion,equipo = seleccionador.huesped().equipo()) }) },
-        { new Consumible(nombre = "Churrasco" , calidad = 2, usabilidad = 3, recuperacion = 40) }
-    ]
-
-
-  method generarItem(){
-   const indiceAleatorio = 0.randomUpTo(generadores.size()-1).truncate(0)
-   return generadores.get(indiceAleatorio).apply()
- 
+class MejoraAtaque inherits PowerUp {
+  override method aplicarA(personaje) {
+    personaje.ataque(personaje.ataque() + mejora)
   }
-  
+}
 
+class MejoraAlcance inherits PowerUp {
+  // OJO: si el equipo separa alcance de movimiento y de ataque, se ajusta solo esta clase.
+  override method aplicarA(personaje) {
+    personaje.alcance(personaje.alcance() + mejora)
+  }
+}
+
+class MejoraVida inherits PowerUp {
+  override method aplicarA(personaje) {
+    personaje.vida(personaje.vida() + mejora)
+  }
+}
+
+//GENERADOR
+object generadorDeItems {
+
+  const generadores = [
+    
+    { new Curacion(nombre = "Churrasco", calidad = 2, usabilidad = 3, cantidad = 40) },
+    { new Curacion(nombre = "Mate", calidad = 1, usabilidad = 3, cantidad = 15) },
+    { new Curacion(nombre = "Botiquin", calidad = 3, usabilidad = 1, cantidad = 80) },
+
+    
+    { new MejoraAtaque(nombre = "MejoraAtaque", calidad = 3, mejora = 10) },
+    { new MejoraAlcance(nombre = "MejoraAlcance", calidad = 3, mejora = 1) },
+    { new MejoraVida(nombre = "MejoraVida", calidad = 3, mejora = 30) },
+
+    
+    { new Granada(nombre = "GranadaMazorca", usabilidad = 1, calidad = 4, area = 2, danio = 200) },
+    { new Granada(nombre = "GranadaCereza", usabilidad = 1, calidad = 2, area = 3, danio = 25) },
+    { new Granada(nombre = "GranadaZapallo", usabilidad = 1, calidad = 3, area = 1, danio = 80) },
+
+    
+    { new PocionCuracion(nombre = "PocionDeLeche", usabilidad = 1, calidad = 2, area = 2, cantidad = 30) },
+    { new PocionCuracion(nombre = "PocionGrande", usabilidad = 1, calidad = 3, area = 1, cantidad = 60) },
+    { new PocionCuracion(nombre = "PocionChica", usabilidad = 1, calidad = 1, area = 3, cantidad = 15) },
+
+    
+    { new BarreraDesplegable(nombre = "BarreraDeHeno", usabilidad = 2, calidad = 1,
+        fabrica = { posicion, equipo => new BloqueDeHeno(position = posicion, equipo = equipo) }) }
+  ]
+
+  method generarItem() = generadores.anyOne().apply()
 }
