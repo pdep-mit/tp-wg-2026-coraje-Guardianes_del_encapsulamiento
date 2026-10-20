@@ -3,6 +3,7 @@ import obstaculos.*
 import seleccionador.*
 
 class Items {
+  const property solido = false
   var property usabilidad  
   var property duenio = null 
   var property calidad

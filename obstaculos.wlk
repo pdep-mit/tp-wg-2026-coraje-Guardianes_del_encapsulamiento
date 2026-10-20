@@ -1,7 +1,11 @@
 class Pared {
   const property objetivoElegible = false
   const property solido = true
-   var property position 
+  var property position 
+  
+  var property equipo = "Neutral" 
+  
+  method recibirDanio(danio) {}
 }
 
 
