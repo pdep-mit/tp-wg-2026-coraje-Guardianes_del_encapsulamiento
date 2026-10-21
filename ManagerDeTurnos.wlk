@@ -3,9 +3,11 @@ import juego.*
 import Personajes.*
 import seleccionador.*
 import cajas.*
+import menu.*
 object turnManager{
  
    var turno = 1
+   var rondaFinalizada = false
   
   method inicioDeTurno(equipo){
     equipo.integrantesVivos(equipo.integrantes()).forEach({jugador => jugador.iniciarTurno()}) 
@@ -22,7 +24,7 @@ object turnManager{
     
   method pasoDeTurno() 
   {
-    
+   if (not rondaFinalizada) {
    self.finDeTurno(self.turnoDe()) // se termina el turno del equipo activo
    self.inicioDeTurno(managerDeEquipos.recorrerEquipos()) // empieza el turno del siguiente equipo
 
@@ -31,11 +33,38 @@ object turnManager{
    if (turno % 4 == 0) {
      generadorDeCajas.generarCaja() //generamos una caja aleatoria cada 4 turnos
    }
+   }
   }
   method turnoDe()
     {
      return managerDeEquipos.equipos().find({equipo => equipo.turnoActivo() }) // se busca en la lista de equipos el equipo que está activo en el turno
     }
+
+  method verificarFinDeRonda() {
+    if (not rondaFinalizada and managerDeEquipos.equipos().size() > 1) {
+      const equipoEliminado = managerDeEquipos.equipos().find({equipo => equipo.estaEliminado()})
+      if (equipoEliminado != null) {
+        const equipoGanador = managerDeEquipos.equipos().find({equipo => not equipo.estaEliminado()})
+        if (equipoGanador != null) {
+          self.finalizarRonda(equipoEliminado, equipoGanador)
+        }
+      }
+    }
+  }
+
+  method finalizarRonda(equipoEliminado, equipoGanador) {
+    rondaFinalizada = true
+    game.say(seleccionador,
+      "Equipo " + equipoEliminado.nombre() + " Eliminado, Equipo Ganador: " + equipoGanador.nombre())
+    game.schedule(2000, {self.reiniciarPartida()})
+  }
+
+  method reiniciarPartida() {
+    turno = 1
+    managerDeEquipos.reiniciar()
+    menu.reiniciar()
+    rondaFinalizada = false
+  }
 
 
 

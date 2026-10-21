@@ -16,6 +16,16 @@ class Equipo {
     return equipo.filter({guacho => guacho.vivo()}) // se filtra los integrantes vivos del equipo
   }
 
+  method estaEliminado() {
+    return self.integrantesVivos(integrantes).isEmpty()
+  }
+
+  method reiniciar() {
+    integrantes = []
+    indice = 0
+    turnoActivo = false
+  }
+
   method recorrerIntegrantes(equipo)  {  // recorre la lista de integrantes vivos del equipo dando la vuelta al primer integrante cuando ya no hay más
     const vivos = self.integrantesVivos(equipo) // tomamos solo los integrantes activos 
 
@@ -34,6 +44,11 @@ object managerDeEquipos {
   method recorrerEquipos (){ // recorre la lista de equipos y vuelve al primer equipo cuando no hay más
    return auxiliar.siguienteDeLaLista(equipos,self)
 }
+
+  method reiniciar() {
+    equipos.forEach({equipo => equipo.reiniciar()})
+    indice = 0
+  }
 
 }
 

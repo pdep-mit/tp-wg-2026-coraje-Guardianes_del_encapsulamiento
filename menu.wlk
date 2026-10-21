@@ -64,7 +64,14 @@ method inicializar(){
   elegidos = []
   contadorElegidos = 0
   ruedaActiva = rueda1
-  
+  indice = 0
+}
+
+method reiniciar(){
+  iteracionesMenu = 0
+  self.inicializar()
+  game.clear()
+  self.iniciar(equipoAzul)
 }
 
 method finalizar(equipo){
@@ -77,7 +84,6 @@ method finalizar(equipo){
            partida.iniciar()}
 }
 }
-
 
 
 

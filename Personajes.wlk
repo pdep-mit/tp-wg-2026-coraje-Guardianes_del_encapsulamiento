@@ -84,7 +84,7 @@ class Personaje { // clase base de personajes
     game.say(self,  "ha muerto")
     game.removeVisual(self)
     vivo = false
-    
+    turnManager.verificarFinDeRonda()
   }
 
   method buffarse(mejora,buffo){
