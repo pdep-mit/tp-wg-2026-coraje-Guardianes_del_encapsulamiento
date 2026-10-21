@@ -7,14 +7,11 @@ import seleccionador.*
 import menu.*
 
 program jueguito {
-  game.width(20)
-  game.height(11)
+  game.width(25)
+  game.height(15)
   game.cellSize(32)
   game.title("Juego")
-  game.boardGround("FondoNivel.png")
-  // hay que rehacer el fondo para que quede bien en un tamaño de pantalla mayor, porque despues no se puede cambiar el tamaño de la pantalla y seria mejor si los niveles fueran más grandes
-
- 
+  game.boardGround("FondoNivelGrande.png")
 
   managerDeEquipos.agregarEquipo(equipoAzul)
   managerDeEquipos.agregarEquipo(equipoRojo)
@@ -26,4 +23,3 @@ program jueguito {
 
 
 }
-

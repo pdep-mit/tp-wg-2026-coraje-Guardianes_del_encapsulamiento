@@ -11,14 +11,14 @@ object partida {
     method iniciar(){
        
     
-       equipoAzul.integrantes().get(0).position(game.at(4,2))
-       equipoAzul.integrantes().get(1).position(game.at(4,4))
-       equipoAzul.integrantes().get(2).position(game.at(4,6))
-       equipoAzul.integrantes().get(3).position(game.at(4,8))
-       equipoRojo.integrantes().get(0).position(game.at(16,2))
-       equipoRojo.integrantes().get(1).position(game.at(16,4))
-       equipoRojo.integrantes().get(2).position(game.at(16,6))
-       equipoRojo.integrantes().get(3).position(game.at(16,8))
+       equipoAzul.integrantes().get(0).position(game.at(4,4))
+       equipoAzul.integrantes().get(1).position(game.at(4,6))
+       equipoAzul.integrantes().get(2).position(game.at(4,8))
+       equipoAzul.integrantes().get(3).position(game.at(4,10))
+       equipoRojo.integrantes().get(0).position(game.at(20,4))
+       equipoRojo.integrantes().get(1).position(game.at(20,6))
+       equipoRojo.integrantes().get(2).position(game.at(20,8))
+       equipoRojo.integrantes().get(3).position(game.at(20,10))
 
       
        equipoAzul.integrantes().forEach({integrante => game.addVisual(integrante)})
@@ -54,7 +54,6 @@ object partida {
 
     }
 }
-
 
 
 
