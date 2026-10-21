@@ -49,9 +49,6 @@ class Personaje { // clase base de personajes
     vida = vidaMaxima.min(vida + cantidad)
   }
 
-  method curar(cantidad) {
-    self.curarse(cantidad)
-  }
 
   method objetivoElegible ()
   {
@@ -113,13 +110,21 @@ class Personaje { // clase base de personajes
      game.say(self,"me equipe con:" + objetoEquipado.nombre())}
   
 
-  method usarObjeto(){objetoEquipado.usarItem()}
+  method usarObjeto() {
+      if (objetoEquipado != null) {
+          objetoEquipado.usarItem()
+      } else {
+          game.say(self, "¡No tengo nada equipado!")
+      }
+  }
 
   method gastarItem(){
     inventario.remove(objetoEquipado)
     objetoEquipado = null
     indice = 0
   }
+
+  method curar(cantidad) { vida += cantidad }
 
   method image(){
     return nombre + equipo.sufijoImagen() + ".png"
