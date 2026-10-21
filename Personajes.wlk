@@ -1,24 +1,48 @@
+import ManagerDeTurnos.*
 
 import juego.*
 import equipos.*
 import auxiliares.*
+import seleccionador.*
 class Personaje { // clase base de personajes
  
   var property position 
+  const nombre
   var property puedeMover = false
   var property puedeAtacar = false
   var property equipo
   var property vida 
-  var property ataque
-  var property alcance
+  var property ataqueBase
+  var property ataque = 0
+  var property alcanceBase
+  var property alcance = 0
+  var property cooldownHabilidadClase = 0
+  var property cooldownHabilidadPersonaje = 0
   var property vivo = true
+  var property defensaBase 
+  var property defensa = 0
   const property solido = true
   const property recolectable = false
+  
+  var property buffosActivos = []
 
   var property inventario = []
   var property indice = 0
   var property objetoEquipado = null
 
+  method inicializarEstadisticas (){
+    ataque =  ataqueBase
+    defensa = defensaBase
+    alcance = alcanceBase
+    cooldownHabilidadClase = 0.max(cooldownHabilidadClase-1)
+    cooldownHabilidadPersonaje = 0.max(cooldownHabilidadPersonaje-1)
+  }
+
+  method iniciarTurno (){
+    self.inicializarEstadisticas()
+    puedeMover = true
+    puedeAtacar = true
+  }
   method objetivoElegible ()
   {
     return self.vivo() // despues puede que haya más condiciones
@@ -27,18 +51,21 @@ class Personaje { // clase base de personajes
   method mover(nuevaPosicion) {
   if(puedeMover and not game.getObjectsIn(nuevaPosicion).any({objeto => objeto.solido()})){   // comprueba que no haya nada solido en el lugar al que se quiere mover (otro jugador o paredes)
     position = nuevaPosicion
-    puedeMover = false } // gasta el movimiento del turno
+    puedeMover = false
+    seleccionador.cambiarCasillasDisponibles()  } // gasta el movimiento del turno
   }
   
   method atacar(objetivo){ 
    if (puedeAtacar and equipo != objetivo.equipo() ){ // comprueba si el personaje puede atacar y si el objetivo es de un equipo distinto
     objetivo.recibirDanio(ataque)
-    puedeAtacar = false // gasta el ataque del turno
+    puedeAtacar = false
+    puedeMover = false
+    seleccionador.quitarCasillasDisponibles()   // gasta el ataque del turno
    }}
   
   
    method recibirDanio (danio){ // reduce la vida en una cantidad de daño y en caso de reducir la vida  
-     vida -= danio
+     vida -= danio/defensa
      game.say(self,"vida:" + self.vida())
      if (vida <= 0){
 
@@ -51,10 +78,17 @@ class Personaje { // clase base de personajes
     vivo = false
     
   }
+
+  method buffarse(mejora,buffo){
+    mejora.apply(self,buffo)
+  }
+ 
+ 
+
   
   method agregarItemAlInventario(item){
      inventario.add(item)
-     game.say(self,"consegui un:" + item)
+     game.say(self,"consegui un:" + item.nombre())
      item.duenio(self)
   }
 
@@ -65,16 +99,10 @@ class Personaje { // clase base de personajes
   
   method equiparObjeto() 
    {objetoEquipado = inventario.get(indice)
-     game.say(self,"me equipe con:" + objetoEquipado)}
+     game.say(self,"me equipe con:" + objetoEquipado.nombre())}
   
 
-  method usarItem() {
-    if (objetoEquipado != null) {
-        objetoEquipado.usarItem()
-    } else {
-        game.say(self, "No tengo nada equipado")
-    }
-  }
+  method usarObjeto(){objetoEquipado.usarItem()}
 
   method gastarItem(){
     inventario.remove(objetoEquipado)
@@ -82,48 +110,140 @@ class Personaje { // clase base de personajes
     indice = 0
   }
 
-  method curar(cantidad) { vida += cantidad }
+  method image(){
+    return nombre + equipo + ".png"
+  }
+
 }
 
-class HombreCalabaza inherits Personaje (vida = 150, ataque = 30, alcance = 3) { // clase de personaje, faltan agregar habilidades y cosas que lo diferencien
+
+
  
 
- method image () { // decide la imagen del personaje dependiendo del equipo que es (probablemente haya que cambiarlo)
-  if (equipo == "Azul"){
-    return "Hombre_calabaza_Azul.png"
-  } else return "Hombre_calabaza_Rojo.png"
- }
+class Soldado inherits Personaje (){
+
+  method habilidadClase(){
+    if(puedeMover){
+    const buffAlcance = {personaje,buffo => personaje.alcance(personaje.alcance() + buffo)}
+    self.buffarse(buffAlcance,2)
+    cooldownHabilidadClase = 2}
+  }
+}
+class Tanque inherits Personaje (){
+
+   method habilidadClase(){
+    const buffDefensa = {personaje, buffo => personaje.defensa(personaje.defensa() + buffo)}
+    self.buffarse(buffDefensa,1)
+    cooldownHabilidadClase = 2
+   }
 }
 
-class Granjero inherits Personaje (vida = 100, ataque = 25, alcance = 4) {
+class Sniper inherits Personaje (){
 
- method image () {
-  if (equipo == "Azul"){
-    return "Granjero_Azul.png"
-  } else return "Granjero_Rojo.png"
+   method habilidadClase(){
+     if (puedeMover and puedeAtacar) {
+      const buffAtaque = {personaje, buffo => personaje.ataque(personaje.ataque() + buffo) }
+      self.buffarse(buffAtaque,10)
+      puedeMover = false
+     }
+   }
+}
+class Medico inherits Personaje (){
+
+   method habilidadClase(){
+     if(self.hayUnCompaniero()) {
+      const companiero = game.getObjectsIn(seleccionador.position()).find({objeto => objeto.vivo()})
+      companiero.curarse(35)
+      cooldownHabilidadClase = 2
+     }
+   }
+   method hayUnCompaniero(){
+       return game.getObjectsIn(seleccionador.position()).any({companiero => companiero.equipo() == equipo and companiero != self})
+   }
+}
+
+
+
+
+
+
+class HombreCalabaza inherits Tanque (nombre = "HombreCalabaza",vida = 140, ataqueBase = 20, alcanceBase = 3, defensaBase = 1) { // clase de personaje, faltan agregar habilidades y cosas que lo diferencien
+ 
+
+ method habilidadPersonaje(){
+  const apuntado = seleccionador.seleccionarObjetivo()
+  if((apuntado.position().x()  -position.x()).abs() + (apuntado.position().y() - position.y()).abs()  <= 1){
+    apuntado.recibirDanio(ataque*3)
+    puedeAtacar = false
+  }
  }
 
 
 }
 
-class EspantaPajaros inherits Personaje (vida = 80, ataque = 40, alcance = 6){
- method image () {
-   if (equipo == "Azul"){
-    return "espantaPajaros_Azul.png"
-  } else return "espantaPajaros_rojo.png"
- }
-}
+class HombreZapallo inherits Tanque (nombre = "HombreZapallo",vida = 160, ataqueBase = 15, alcanceBase = 3, defensaBase = 1 ){
 
-class VacaMedico inherits Personaje (vida = 100, ataque = 20, alcance = 3 ) {
-  
-  method image( ){
-   if (equipo == "Azul"){
-    return "Vaca_Medico_Azul.png"
-  } else return "Vaca_Medico_Rojo.png"
+  method habilidadPersonaje(){
+
   }
 }
 
+ 
+class Granjero inherits Soldado (nombre = "Granjero",vida = 100, ataqueBase = 25, alcanceBase = 4,defensaBase = 1) {
+  var usoHabilidad = 2
+
+ method habilidadPersonaje(){
+   const objetivo = seleccionador.seleccionarObjetivo()
+   objetivo.recibirDanio(ataque-10)
+   puedeAtacar = false
+   usoHabilidad -= 1
+   if (usoHabilidad < 1){cooldownHabilidadPersonaje = 2  usoHabilidad = 2}
+ }
+}
+
+class EspantaPajaros inherits Soldado (nombre = "EspantaPajaros",vida = 110, ataqueBase = 25, alcanceBase = 4, defensaBase = 1){
+ 
+ method habilidadPersonaje(){
+   
+ }
+
+ 
+
+}
+
+class LoboSniper inherits Sniper(nombre = "LoboSniper",vida = 80, ataqueBase = 40, alcanceBase = 6,defensaBase = 1){
+   
+   method habilidadPersonaje(){
 
 
 
+   }
+}
 
+
+class KillerBunny inherits Sniper(nombre = "KillerBunny",vida = 90, ataqueBase = 35, alcanceBase = 6, defensaBase = 1)
+
+{
+  method habilidadPersonaje(){  }
+
+}
+
+class VacaMedico inherits Medico (nombre = "VacaMedico",vida = 100, ataqueBase = 20, alcanceBase = 3,defensaBase = 1 ) {
+  
+  method habilidadPersonaje(){
+   if(self.hayUnCompaniero()) {
+   const companiero =  seleccionador.seleccionarObjetivo()
+   companiero.buffarse(companiero.ataque(),15)
+   cooldownHabilidadPersonaje = 2
+   }
+ }
+
+
+}
+
+class OvejaMedica inherits Medico(nombre = "OvejaMedica",vida = 100, ataqueBase = 15, alcanceBase = 4,defensaBase = 1) {
+
+   method habilidadPersonaje(){}
+
+  
+}

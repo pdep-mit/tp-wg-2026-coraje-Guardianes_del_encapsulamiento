@@ -30,7 +30,7 @@ program jueguito {
   game.addVisual(hombre1)
   game.addVisual(vaca)
   game.addVisual(granjero)
-  game.addVisual(seleccionador)  // añadimos los visuales
+    // añadimos los visuales
   
   keyboard.left().onPressDo({seleccionador.mover(seleccionador.position().left(1))})
   keyboard.right().onPressDo({seleccionador.mover(seleccionador.position().right(1))})
@@ -48,6 +48,10 @@ program jueguito {
   keyboard.u().onPressDo({seleccionador.huesped().usarObjeto()})
 
   keyboard.c().onPressDo({generadorDeCajas.generarCaja()})
+
+  keyboard.num1().onPressDo({seleccionador.activarHabilidadClase()})
+
+  keyboard.num2().onPressDo({seleccionador.activarHabilidadPersonaje()})
 
   keyboard.num0().onPressDo({turnManager.pasoDeTurno()}) // pasamos turno de un equipo a otro
   game.start()
