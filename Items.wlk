@@ -80,7 +80,7 @@ class PocionCuracion inherits Lanzable {
   const property cantidad
 
   override method aplicarEfectoA(afectado) {
-    afectado.curar(cantidad)
+    afectado.curarse(cantidad)
   }
 }
 
@@ -120,7 +120,7 @@ class Curacion inherits Consumible {
   const property cantidad
 
   override method aplicarA(personaje) {
-    personaje.curar(cantidad)
+    personaje.curarse(cantidad)
   }
 
   override method mensajeDeUso() = "te curaste con " + nombre

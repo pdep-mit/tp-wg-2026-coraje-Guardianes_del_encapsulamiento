@@ -12,6 +12,7 @@ class Personaje { // clase base de personajes
   var property puedeAtacar = false
   var property equipo
   var property vida 
+  const property vidaMaxima
   var property ataqueBase
   var property ataque = 0
   var property alcanceBase
@@ -43,6 +44,15 @@ class Personaje { // clase base de personajes
     puedeMover = true
     puedeAtacar = true
   }
+
+  method curarse(cantidad) {
+    vida = vidaMaxima.min(vida + cantidad)
+  }
+
+  method curar(cantidad) {
+    self.curarse(cantidad)
+  }
+
   method objetivoElegible ()
   {
     return self.vivo() // despues puede que haya más condiciones
@@ -167,7 +177,7 @@ class Medico inherits Personaje (){
 
 
 
-class HombreCalabaza inherits Tanque (nombre = "HombreCalabaza",vida = 140, ataqueBase = 20, alcanceBase = 2, defensaBase = 1) { // clase de personaje, faltan agregar habilidades y cosas que lo diferencien
+class HombreCalabaza inherits Tanque (nombre = "HombreCalabaza",vida = 140, vidaMaxima = 140, ataqueBase = 20, alcanceBase = 2, defensaBase = 1) { // clase de personaje, faltan agregar habilidades y cosas que lo diferencien
  
 
  method habilidadPersonaje(){
@@ -181,7 +191,7 @@ class HombreCalabaza inherits Tanque (nombre = "HombreCalabaza",vida = 140, ataq
 
 }
 
-class HombreZapallo inherits Tanque (nombre = "HombreZapallo",vida = 160, ataqueBase = 15, alcanceBase = 2, defensaBase = 1 ){
+class HombreZapallo inherits Tanque (nombre = "HombreZapallo",vida = 160, vidaMaxima = 160, ataqueBase = 15, alcanceBase = 2, defensaBase = 1 ){
 
   method habilidadPersonaje(){
 
@@ -189,7 +199,7 @@ class HombreZapallo inherits Tanque (nombre = "HombreZapallo",vida = 160, ataque
 }
 
  
-class Granjero inherits Soldado (nombre = "Granjero",vida = 100, ataqueBase = 25, alcanceBase = 3,defensaBase = 1) {
+class Granjero inherits Soldado (nombre = "Granjero",vida = 100, vidaMaxima = 100, ataqueBase = 25, alcanceBase = 3,defensaBase = 1) {
   var usoHabilidad = 2
 
  method habilidadPersonaje(){
@@ -201,7 +211,7 @@ class Granjero inherits Soldado (nombre = "Granjero",vida = 100, ataqueBase = 25
  }
 }
 
-class EspantaPajaros inherits Soldado (nombre = "EspantaPajaros",vida = 110, ataqueBase = 25, alcanceBase = 3, defensaBase = 1){
+class EspantaPajaros inherits Soldado (nombre = "EspantaPajaros",vida = 110, vidaMaxima = 110, ataqueBase = 25, alcanceBase = 3, defensaBase = 1){
  
  method habilidadPersonaje(){
    
@@ -211,7 +221,7 @@ class EspantaPajaros inherits Soldado (nombre = "EspantaPajaros",vida = 110, ata
 
 }
 
-class LoboSniper inherits Sniper(nombre = "LoboSniper",vida = 80, ataqueBase = 40, alcanceBase = 4,defensaBase = 1){
+class LoboSniper inherits Sniper(nombre = "LoboSniper",vida = 80, vidaMaxima = 80, ataqueBase = 40, alcanceBase = 4,defensaBase = 1){
    
    method habilidadPersonaje(){
 
@@ -221,14 +231,14 @@ class LoboSniper inherits Sniper(nombre = "LoboSniper",vida = 80, ataqueBase = 4
 }
 
 
-class KillerBunny inherits Sniper(nombre = "KillerBunny",vida = 90, ataqueBase = 35, alcanceBase = 4, defensaBase = 1)
+class KillerBunny inherits Sniper(nombre = "KillerBunny",vida = 90, vidaMaxima = 90, ataqueBase = 35, alcanceBase = 4,defensaBase = 1)
 
 {
   method habilidadPersonaje(){  }
 
 }
 
-class VacaMedico inherits Medico (nombre = "VacaMedico",vida = 100, ataqueBase = 20, alcanceBase = 3,defensaBase = 1 ) {
+class VacaMedico inherits Medico (nombre = "VacaMedico",vida = 100, vidaMaxima = 100, ataqueBase = 20, alcanceBase = 3,defensaBase = 1 ) {
   
   method habilidadPersonaje(){
    if(self.hayUnCompaniero()) {
@@ -241,7 +251,7 @@ class VacaMedico inherits Medico (nombre = "VacaMedico",vida = 100, ataqueBase =
 
 }
 
-class OvejaMedica inherits Medico(nombre = "OvejaMedica",vida = 100, ataqueBase = 15, alcanceBase = 4,defensaBase = 1) {
+class OvejaMedica inherits Medico(nombre = "OvejaMedica",vida = 100, vidaMaxima = 100, ataqueBase = 15, alcanceBase = 4, defensaBase = 1) {
 
    method habilidadPersonaje(){}
 
