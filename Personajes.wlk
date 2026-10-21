@@ -7,7 +7,7 @@ import seleccionador.*
 class Personaje { // clase base de personajes
  
   var property position 
-  const nombre
+  const property nombre
   var property puedeMover = false
   var property puedeAtacar = false
   var property equipo
@@ -56,7 +56,8 @@ class Personaje { // clase base de personajes
   }
 
   method mover(nuevaPosicion) {
-  if(puedeMover and not game.getObjectsIn(nuevaPosicion).any({objeto => objeto.solido()})){   // comprueba que no haya nada solido en el lugar al que se quiere mover (otro jugador o paredes)
+  if(puedeMover and limitesTablero.contiene(nuevaPosicion) and
+    not game.getObjectsIn(nuevaPosicion).any({objeto => objeto.solido()})){   // comprueba que no haya nada solido en el lugar al que se quiere mover (otro jugador o paredes)
     position = nuevaPosicion
     puedeMover = false
     seleccionador.cambiarCasillasDisponibles()  } // gasta el movimiento del turno
@@ -126,7 +127,7 @@ class Personaje { // clase base de personajes
   method curar(cantidad) { vida += cantidad }
 
   method image(){
-    return nombre + equipo + ".png"
+    return nombre + equipo.sufijoImagen() + ".png"
   }
 
 }
@@ -183,7 +184,6 @@ class Medico inherits Personaje (){
 
 
 class HombreCalabaza inherits Tanque (nombre = "HombreCalabaza",vida = 140, vidaMaxima = 140, ataqueBase = 20, alcanceBase = 2, defensaBase = 1) { // clase de personaje, faltan agregar habilidades y cosas que lo diferencien
- 
 
  method habilidadPersonaje(){
   const apuntado = seleccionador.seleccionarObjetivo()

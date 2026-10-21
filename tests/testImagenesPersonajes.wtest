@@ -1,0 +1,44 @@
+import Personajes.*
+import creadorDePersonajes.*
+import equipos.*
+
+describe "Imagenes de personajes" {
+  test "Cada personaje tiene una imagen para cada equipo" {
+    assert.equals("HombreCalabazaAzul.png", new HombreCalabaza(position = game.at(0, 0), equipo = equipoAzul).image())
+    assert.equals("HombreCalabazaRojo.png", new HombreCalabaza(position = game.at(0, 0), equipo = equipoRojo).image())
+    assert.equals("HombreZapalloAzul.png", new HombreZapallo(position = game.at(0, 0), equipo = equipoAzul).image())
+    assert.equals("HombreZapalloRojo.png", new HombreZapallo(position = game.at(0, 0), equipo = equipoRojo).image())
+    assert.equals("GranjeroAzul.png", new Granjero(position = game.at(0, 0), equipo = equipoAzul).image())
+    assert.equals("GranjeroRojo.png", new Granjero(position = game.at(0, 0), equipo = equipoRojo).image())
+    assert.equals("EspantaPajarosAzul.png", new EspantaPajaros(position = game.at(0, 0), equipo = equipoAzul).image())
+    assert.equals("EspantaPajarosRojo.png", new EspantaPajaros(position = game.at(0, 0), equipo = equipoRojo).image())
+    assert.equals("VacaMedicoAzul.png", new VacaMedico(position = game.at(0, 0), equipo = equipoAzul).image())
+    assert.equals("VacaMedicoRojo.png", new VacaMedico(position = game.at(0, 0), equipo = equipoRojo).image())
+    assert.equals("OvejaMedicaAzul.png", new OvejaMedica(position = game.at(0, 0), equipo = equipoAzul).image())
+    assert.equals("OvejaMedicaRojo.png", new OvejaMedica(position = game.at(0, 0), equipo = equipoRojo).image())
+    assert.equals("LoboSniperAzul.png", new LoboSniper(position = game.at(0, 0), equipo = equipoAzul).image())
+    assert.equals("LoboSniperRojo.png", new LoboSniper(position = game.at(0, 0), equipo = equipoRojo).image())
+    assert.equals("KillerBunnyAzul.png", new KillerBunny(position = game.at(0, 0), equipo = equipoAzul).image())
+    assert.equals("KillerBunnyRojo.png", new KillerBunny(position = game.at(0, 0), equipo = equipoRojo).image())
+  }
+
+  test "El creador conserva la imagen de HombreCalabaza al iniciar la partida" {
+    const calabazaAzul = generadorDePersonajes.crearNuevoPersonaje(
+      new HombreCalabaza(position = game.at(0, 0), equipo = equipoAzul), equipoAzul)
+    const calabazaRoja = generadorDePersonajes.crearNuevoPersonaje(
+      new HombreCalabaza(position = game.at(0, 0), equipo = equipoRojo), equipoRojo)
+
+    assert.equals("HombreCalabazaAzul.png", calabazaAzul.image())
+    assert.equals("HombreCalabazaRojo.png", calabazaRoja.image())
+  }
+
+  test "El creador conserva la imagen de Granjero al iniciar la partida" {
+    const granjeroAzul = generadorDePersonajes.crearNuevoPersonaje(
+      new Granjero(position = game.at(0, 0), equipo = equipoAzul), equipoAzul)
+    const granjeroRojo = generadorDePersonajes.crearNuevoPersonaje(
+      new Granjero(position = game.at(0, 0), equipo = equipoRojo), equipoRojo)
+
+    assert.equals("GranjeroAzul.png", granjeroAzul.image())
+    assert.equals("GranjeroRojo.png", granjeroRojo.image())
+  }
+}

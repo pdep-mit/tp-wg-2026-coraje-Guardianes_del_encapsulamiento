@@ -52,7 +52,7 @@ class ImagenPersonaje {
 
 }
 
-const rueda1 = new RuedaSeleccionadora(position = game.center().left(5))
-const rueda2 = new RuedaSeleccionadora(position = game.center().left(2))
-const rueda3 = new RuedaSeleccionadora(position = game.center().right(1))
-const rueda4 = new RuedaSeleccionadora(position = game.center().right(4))
+const rueda1 = new RuedaSeleccionadora(position = game.at(6, 7))
+const rueda2 = new RuedaSeleccionadora(position = game.at(10, 7))
+const rueda3 = new RuedaSeleccionadora(position = game.at(14, 7))
+const rueda4 = new RuedaSeleccionadora(position = game.at(18, 7))
