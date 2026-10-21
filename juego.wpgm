@@ -4,56 +4,23 @@ import Personajes.*
 import equipos.*
 import ManagerDeTurnos.*
 import seleccionador.*
+import menu.*
 
 program jueguito {
-  game.width(16)
-  game.height(10)
+  game.width(20)
+  game.height(11)
   game.cellSize(32)
   game.title("Juego")
+  game.boardGround("FondoNivel.png")
+  // hay que rehacer el fondo para que quede bien en un tamaño de pantalla mayor, porque despues no se puede cambiar el tamaño de la pantalla y seria mejor si los niveles fueran más grandes
+
  
-  const hombre = new HombreCalabaza(position = game.center().up(4),equipo = "Azul")
-  const hombre1 = new HombreCalabaza(position = game.center().left(5),equipo = "Azul")
-  const granjero = new Granjero(position = game.center().right(2),equipo ="Rojo")
-  const vaca = new VacaMedico(position = game.center().left(2),equipo = "Rojo") // creamos los personajes
-  const equipoAzul = new Equipo() 
-  const equipoRojo = new Equipo()  // creamos los equipos
+
   managerDeEquipos.agregarEquipo(equipoAzul)
-  managerDeEquipos.agregarEquipo(equipoRojo)  // añadimos los equipos a la lista de equipos
-  equipoAzul.agregarPersonajeaEquipo(hombre)
-  equipoAzul.agregarPersonajeaEquipo(hombre1)
-  equipoRojo.agregarPersonajeaEquipo(vaca)
-  equipoRojo.agregarPersonajeaEquipo(granjero)   // añadimos los personajes a los equipos
-  seleccionador.huesped(hombre)   // establecemos un huesped para el seleccionador 
-  turnManager.inicioDeTurno(equipoAzul) // inicializamos el turno para el equipo azul
+  managerDeEquipos.agregarEquipo(equipoRojo)
   
-  game.addVisual(hombre)
-  game.addVisual(hombre1)
-  game.addVisual(vaca)
-  game.addVisual(granjero)
-    // añadimos los visuales
-  
-  keyboard.left().onPressDo({seleccionador.mover(seleccionador.position().left(1))})
-  keyboard.right().onPressDo({seleccionador.mover(seleccionador.position().right(1))})
-  keyboard.up().onPressDo({seleccionador.mover(seleccionador.position().up(1))})
-  keyboard.down().onPressDo({seleccionador.mover(seleccionador.position().down(1))}) // añadimos los imputs de movimiento del seleccionador
+  menu.iniciar(equipoAzul)
 
-  keyboard.enter().onPressDo({seleccionador.accionContextual()}) // dependiendo el contexto decide que accion realizar
-
-  keyboard.alt().onPressDo({seleccionador.cambioDeHuesped(turnManager.turnoDe().recorrerIntegrantes(turnManager.turnoDe().integrantes()))}) // cambio de huesped del seleccionador
-
-  keyboard.i().onPressDo({seleccionador.huesped().recorrerInventario()})
-
-  keyboard.o().onPressDo({seleccionador.huesped().equiparObjeto()})
-
-  keyboard.u().onPressDo({seleccionador.huesped().usarObjeto()})
-
-  keyboard.c().onPressDo({generadorDeCajas.generarCaja()})
-
-  keyboard.num1().onPressDo({seleccionador.activarHabilidadClase()})
-
-  keyboard.num2().onPressDo({seleccionador.activarHabilidadPersonaje()})
-
-  keyboard.num0().onPressDo({turnManager.pasoDeTurno()}) // pasamos turno de un equipo a otro
   game.start()
   
 

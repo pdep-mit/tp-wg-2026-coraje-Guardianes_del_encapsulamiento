@@ -20,7 +20,7 @@ class Personaje { // clase base de personajes
   var property cooldownHabilidadPersonaje = 0
   var property vivo = true
   var property defensaBase 
-  var property defensa = 0
+  var property defensa = 1
   const property solido = true
   const property recolectable = false
   
@@ -92,7 +92,7 @@ class Personaje { // clase base de personajes
      item.duenio(self)
   }
 
-  method recorrerInventario() {return auxiliar.recorrerLista(inventario,self)}
+  method recorrerInventario() {return auxiliar.siguienteDeLaLista(inventario,self)}
   
 
   method recolectarAlgo(recompensa)  { self.agregarItemAlInventario(recompensa.generarRecompensa())}
@@ -167,7 +167,7 @@ class Medico inherits Personaje (){
 
 
 
-class HombreCalabaza inherits Tanque (nombre = "HombreCalabaza",vida = 140, ataqueBase = 20, alcanceBase = 3, defensaBase = 1) { // clase de personaje, faltan agregar habilidades y cosas que lo diferencien
+class HombreCalabaza inherits Tanque (nombre = "HombreCalabaza",vida = 140, ataqueBase = 20, alcanceBase = 2, defensaBase = 1) { // clase de personaje, faltan agregar habilidades y cosas que lo diferencien
  
 
  method habilidadPersonaje(){
@@ -181,7 +181,7 @@ class HombreCalabaza inherits Tanque (nombre = "HombreCalabaza",vida = 140, ataq
 
 }
 
-class HombreZapallo inherits Tanque (nombre = "HombreZapallo",vida = 160, ataqueBase = 15, alcanceBase = 3, defensaBase = 1 ){
+class HombreZapallo inherits Tanque (nombre = "HombreZapallo",vida = 160, ataqueBase = 15, alcanceBase = 2, defensaBase = 1 ){
 
   method habilidadPersonaje(){
 
@@ -189,7 +189,7 @@ class HombreZapallo inherits Tanque (nombre = "HombreZapallo",vida = 160, ataque
 }
 
  
-class Granjero inherits Soldado (nombre = "Granjero",vida = 100, ataqueBase = 25, alcanceBase = 4,defensaBase = 1) {
+class Granjero inherits Soldado (nombre = "Granjero",vida = 100, ataqueBase = 25, alcanceBase = 3,defensaBase = 1) {
   var usoHabilidad = 2
 
  method habilidadPersonaje(){
@@ -201,7 +201,7 @@ class Granjero inherits Soldado (nombre = "Granjero",vida = 100, ataqueBase = 25
  }
 }
 
-class EspantaPajaros inherits Soldado (nombre = "EspantaPajaros",vida = 110, ataqueBase = 25, alcanceBase = 4, defensaBase = 1){
+class EspantaPajaros inherits Soldado (nombre = "EspantaPajaros",vida = 110, ataqueBase = 25, alcanceBase = 3, defensaBase = 1){
  
  method habilidadPersonaje(){
    
@@ -211,7 +211,7 @@ class EspantaPajaros inherits Soldado (nombre = "EspantaPajaros",vida = 110, ata
 
 }
 
-class LoboSniper inherits Sniper(nombre = "LoboSniper",vida = 80, ataqueBase = 40, alcanceBase = 6,defensaBase = 1){
+class LoboSniper inherits Sniper(nombre = "LoboSniper",vida = 80, ataqueBase = 40, alcanceBase = 4,defensaBase = 1){
    
    method habilidadPersonaje(){
 
@@ -221,7 +221,7 @@ class LoboSniper inherits Sniper(nombre = "LoboSniper",vida = 80, ataqueBase = 4
 }
 
 
-class KillerBunny inherits Sniper(nombre = "KillerBunny",vida = 90, ataqueBase = 35, alcanceBase = 6, defensaBase = 1)
+class KillerBunny inherits Sniper(nombre = "KillerBunny",vida = 90, ataqueBase = 35, alcanceBase = 4, defensaBase = 1)
 
 {
   method habilidadPersonaje(){  }

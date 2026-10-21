@@ -7,11 +7,11 @@ object turnManager{
    var turno = 1
   
   method inicioDeTurno(equipo){
-      
+    equipo.integrantesVivos(equipo.integrantes()).forEach({jugador => jugador.iniciarTurno()}) 
     seleccionador.cambioDeHuesped(equipo.integrantesVivos(equipo.integrantes()).get(0)) // se cambia el seleccionador al primer integrante vivo del siguiente equipo
     equipo.turnoActivo(true) // se activa el turno del equipo
-    equipo.integrantesVivos(equipo.integrantes()).forEach({jugador => jugador.puedeMover(true)}) 
-    equipo.integrantesVivos(equipo.integrantes()).forEach({jugador => jugador.puedeAtacar(true)}) // se activa la capacidad de moverse y atacar de los integrantes vivos
+   
+  
   }
 
   method finDeTurno(equipo)

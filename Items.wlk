@@ -135,6 +135,7 @@ class PowerUp inherits Consumible(usabilidad = 1) {
 class MejoraAtaque inherits PowerUp {
   override method aplicarA(personaje) {
     personaje.ataque(personaje.ataque() + mejora)
+    personaje.ataqueBase(personaje.ataque())
   }
 }
 
@@ -142,6 +143,7 @@ class MejoraAlcance inherits PowerUp {
   // OJO: si el equipo separa alcance de movimiento y de ataque, se ajusta solo esta clase.
   override method aplicarA(personaje) {
     personaje.alcance(personaje.alcance() + mejora)
+    personaje.alcanceBase(personaje.alcance())
   }
 }
 
