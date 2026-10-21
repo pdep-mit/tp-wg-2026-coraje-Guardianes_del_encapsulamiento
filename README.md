@@ -1,5 +1,4 @@
-# Wollok Game: Título de juego
-
+# Wollok Game: Riego Cruzado
 **Grupo:** Guardianes del Encapsulamiento
 
 **Integrantes:**

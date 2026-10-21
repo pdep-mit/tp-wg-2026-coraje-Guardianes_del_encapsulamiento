@@ -14,9 +14,9 @@ class Personaje { // clase base de personajes
   var property vida 
   const property vidaMaxima
   var property ataqueBase
-  var property ataque = 0
+  var property ataque = ataqueBase
   var property alcanceBase
-  var property alcance = 0
+  var property alcance = alcanceBase
   var property cooldownHabilidadClase = 0
   var property cooldownHabilidadPersonaje = 0
   var property vivo = true

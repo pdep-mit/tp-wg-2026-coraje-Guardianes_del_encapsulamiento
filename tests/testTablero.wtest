@@ -23,7 +23,7 @@ describe "Items sobre el tablero" {
     granada.duenio(lanzador)
     lanzador.objetoEquipado(granada)
     lanzador.usarObjeto()
-    assert.equals(120, enemigo.vida())
+    assert.equals(110, enemigo.vida())
     assert.equals(100, lejano.vida())
   }
 
@@ -34,7 +34,7 @@ describe "Items sobre el tablero" {
     pocion.duenio(lanzador)
     lanzador.objetoEquipado(pocion)
     lanzador.usarObjeto()
-    assert.equals(120, enemigo.vida())
+    assert.equals(110, enemigo.vida())
   }
 
   test "Una BarreraDesplegable se coloca en casilla libre y no sobre un solido" {

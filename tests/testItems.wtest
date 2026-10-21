@@ -18,6 +18,14 @@ describe "Tests de items: herencia y polimorfismo" {
     assert.equals(null, granjero.objetoEquipado())
   }
 
+  test "Una curacion no supera la vida maxima" {
+    const personaje = new Granjero(position = game.at(2, 2), equipo = "Azul")
+    personaje.recibirDanio(40)
+    personaje.curarse(100)
+
+    assert.equals(personaje.vidaMaxima(), personaje.vida())
+  }
+
   test "Un item con varios usos recién se gasta al agotarlos" {
     const mate = new Curacion(nombre = "Mate", calidad = 1, usabilidad = 2, cantidad = 10)
     mate.duenio(granjero)
@@ -45,7 +53,7 @@ describe "Tests de items: herencia y polimorfismo" {
     })
 
     assert.equals(35, granjero.ataque())
-    assert.equals(5, granjero.alcance())
+    assert.equals(4, granjero.alcance())
     assert.equals(130, granjero.vida())
   }
 
