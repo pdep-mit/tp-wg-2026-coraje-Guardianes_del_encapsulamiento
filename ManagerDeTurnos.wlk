@@ -2,6 +2,7 @@ import equipos.*
 import juego.*
 import Personajes.*
 import seleccionador.*
+import cajas.*
 object turnManager{
  
    var turno = 1
@@ -27,6 +28,9 @@ object turnManager{
 
    turno += 1
    game.say(seleccionador,"turno:" + turno)
+   if (turno % 4 == 0) {
+     generadorDeCajas.generarCaja() //generamos una caja aleatoria cada 4 turnos
+   }
   }
   method turnoDe()
     {

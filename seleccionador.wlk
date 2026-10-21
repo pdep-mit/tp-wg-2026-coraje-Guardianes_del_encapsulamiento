@@ -14,7 +14,8 @@ object seleccionador {
  
   method mover(nuevaPosicion) { // mueve al seleccionador en una zona definida por un rombo con centro en el huesped
     if (limitesTablero.contiene(nuevaPosicion) and
-      (nuevaPosicion.x()  -huesped.position().x()).abs() + (nuevaPosicion.y() - huesped.position().y()).abs()  <= huesped.alcance() )
+      (nuevaPosicion.x()  -huesped.position().x()).abs() + (nuevaPosicion.y() - huesped.position().y()).abs()  <= huesped.alcance() and
+      self.puedeSeleccionar(nuevaPosicion))
     { position = nuevaPosicion  }}
  
   method mostrarCasillasDisponibles(){
@@ -30,9 +31,18 @@ object seleccionador {
 
         (-huesped.alcance()..huesped.alcance()).forEach({ coordenada_x => (-huesped.alcance()..huesped.alcance()).forEach({ coordenada_y =>
           const casilla = game.at(self.position().x() + coordenada_x, self.position().y() + coordenada_y)
-          if (coordenada_x.abs() + coordenada_y.abs() <= huesped.alcance() and limitesTablero.contiene(casilla)){ casillas.add(casilla)}
+          if (coordenada_x.abs() + coordenada_y.abs() <= huesped.alcance() and
+            limitesTablero.contiene(casilla) and
+            self.puedeSeleccionar(casilla)){ casillas.add(casilla)}
         })})
           return casillas}
+
+//metodo para que el selecc. distinga entre casillas que puede seleccionar y casillas que no puede seleccionar (por ejemplo, si hay un enemigo en la casilla, no puede seleccionarla)
+  method puedeSeleccionar(casilla) {
+    return not game.getObjectsIn(casilla).any({objeto =>
+      objeto.solido() and not objeto.objetivoElegible() and objeto != huesped
+    })
+  }
 
   method cambiarCasillasDisponibles(){
       self.quitarCasillasDisponibles()
@@ -67,11 +77,40 @@ object seleccionador {
 
   method atacarObjetivo(){
     const objetivo  = self.seleccionarObjetivo()
-    huesped.atacar(objetivo)
+    if (objetivo != null and self.hayLineaDeAtaque(objetivo)) {
+      huesped.atacar(objetivo)
+    }
   }
 
   method seleccionarObjetivo (){ 
       return game.getObjectsIn(self.position()).find({objeto => objeto.objetivoElegible() objeto != huesped})} 
+
+  method hayLineaDeAtaque(objetivo) {
+    const origen = huesped.position()
+    const destino = objetivo.position()
+    return (origen.x() == destino.x() and
+      not self.hayParedEntre(origen.x(), origen.y(), destino.y(), true)) or
+      (origen.y() == destino.y() and
+      not self.hayParedEntre(origen.y(), origen.x(), destino.x(), false)) or
+      (origen.x() != destino.x() and origen.y() != destino.y())
+  }
+
+  method hayParedEntre(coordenadaFija, inicio, fin, ejeVertical) {
+    const desde = inicio.min(fin) + 1
+    const hasta = inicio.max(fin) - 1
+    if (ejeVertical) {
+      return (desde..hasta).any({ coordenada =>
+        self.hayParedEn(game.at(coordenadaFija, coordenada))
+      })
+    }
+    return (desde..hasta).any({ coordenada =>
+      self.hayParedEn(game.at(coordenada, coordenadaFija))
+    })
+  }
+
+  method hayParedEn(casilla) {
+    return game.getObjectsIn(casilla).any({objeto => objeto.solido() and not objeto.objetivoElegible()})
+  }
        
   method activarHabilidadClase(){
      if(huesped.cooldownHabilidadClase() == 0){

@@ -5,12 +5,19 @@ import seleccionador.*
 import ManagerDeTurnos.*
 import Items.*
 import cajas.*
+import obstaculos.*
 
 object partida {
 
     method iniciar(){
+
+       const paredCentral = new Pared(position = game.at(12,7))
+       const paredSuperior = new Pared(position = game.at(12,4))
+       const paredInferior = new Pared(position = game.at(12,10))
+       game.addVisual(paredCentral)
+       game.addVisual(paredSuperior)
+       game.addVisual(paredInferior)
        
-    
        equipoAzul.integrantes().get(0).position(game.at(4,4))
        equipoAzul.integrantes().get(1).position(game.at(4,6))
        equipoAzul.integrantes().get(2).position(game.at(4,8))
@@ -54,6 +61,4 @@ object partida {
 
     }
 }
-
-
 

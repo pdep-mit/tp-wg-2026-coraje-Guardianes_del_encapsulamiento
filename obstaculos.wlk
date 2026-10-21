@@ -6,6 +6,8 @@ class Pared {
   var property equipo = "Neutral" 
   
   method recibirDanio(danio) {}
+
+  method image() = "ParedLadrillo.png"
 }
 
 

@@ -21,7 +21,7 @@ class Items {
     if (self.puedeUsarse()) {
       usabilidad -= 1
       self.efecto()
-      console.println(self.mensajeDeUso())
+      game.say(duenio, self.mensajeDeUso())
       if (usabilidad <= 0) {
         duenio.gastarItem()
       }
@@ -123,7 +123,7 @@ class Curacion inherits Consumible {
     personaje.curarse(cantidad)
   }
 
-  override method mensajeDeUso() = "te curaste con " + nombre
+  override method mensajeDeUso() = "te curaste " + cantidad + " con " + nombre
 }
 
 class PowerUp inherits Consumible(usabilidad = 1) {
