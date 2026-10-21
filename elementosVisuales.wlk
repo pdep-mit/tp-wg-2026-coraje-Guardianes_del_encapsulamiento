@@ -11,4 +11,4 @@ class Fondo {
    var property position = game.at(0,0)
    var property image
 }
-const fondoDelMenu = new Fondo(image = "FondoMenu.png")
+const fondoDelMenu = new Fondo(image = "FondoMenuGrande.png")

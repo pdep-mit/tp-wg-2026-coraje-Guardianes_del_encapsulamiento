@@ -59,7 +59,8 @@ class Personaje { // clase base de personajes
   }
 
   method mover(nuevaPosicion) {
-  if(puedeMover and not game.getObjectsIn(nuevaPosicion).any({objeto => objeto.solido()})){   // comprueba que no haya nada solido en el lugar al que se quiere mover (otro jugador o paredes)
+  if(puedeMover and limitesTablero.contiene(nuevaPosicion) and
+    not game.getObjectsIn(nuevaPosicion).any({objeto => objeto.solido()})){   // comprueba que no haya nada solido en el lugar al que se quiere mover (otro jugador o paredes)
     position = nuevaPosicion
     puedeMover = false
     seleccionador.cambiarCasillasDisponibles()  } // gasta el movimiento del turno

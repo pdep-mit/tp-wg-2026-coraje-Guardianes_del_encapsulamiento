@@ -1,4 +1,5 @@
 import Personajes.*
+import auxiliares.*
 
 object seleccionador { 
   
@@ -12,7 +13,8 @@ object seleccionador {
  
  
   method mover(nuevaPosicion) { // mueve al seleccionador en una zona definida por un rombo con centro en el huesped
-    if ((nuevaPosicion.x()  -huesped.position().x()).abs() + (nuevaPosicion.y() - huesped.position().y()).abs()  <= huesped.alcance() ) 
+    if (limitesTablero.contiene(nuevaPosicion) and
+      (nuevaPosicion.x()  -huesped.position().x()).abs() + (nuevaPosicion.y() - huesped.position().y()).abs()  <= huesped.alcance() )
     { position = nuevaPosicion  }}
  
   method mostrarCasillasDisponibles(){
@@ -26,7 +28,10 @@ object seleccionador {
 
   method casillasDisponibles (){
 
-        (-huesped.alcance()..huesped.alcance()).forEach({ coordenada_x => (-huesped.alcance()..huesped.alcance()).forEach({ coordenada_y =>   if (coordenada_x.abs() + coordenada_y.abs() <= huesped.alcance()){ casillas.add(game.at(self.position().x() + coordenada_x, self.position().y() + coordenada_y))}})})
+        (-huesped.alcance()..huesped.alcance()).forEach({ coordenada_x => (-huesped.alcance()..huesped.alcance()).forEach({ coordenada_y =>
+          const casilla = game.at(self.position().x() + coordenada_x, self.position().y() + coordenada_y)
+          if (coordenada_x.abs() + coordenada_y.abs() <= huesped.alcance() and limitesTablero.contiene(casilla)){ casillas.add(casilla)}
+        })})
           return casillas}
 
   method cambiarCasillasDisponibles(){
