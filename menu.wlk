@@ -20,9 +20,10 @@ method iniciar(equipo){
 
 const cartelExplicativo = new Cartel(text = "Elige los integrantes de tu equipo",position = game.center().up(3),textColor ="FFFFFF")
 const cartelDeEquipo = new Cartel(text = "Equipo " + equipo.nombre(),position = game.center().up(2),textColor = "FFFFFF")
+
+game.addVisual(fondoDelMenu)
 game.addVisual(cartelExplicativo)
 game.addVisual(cartelDeEquipo)
-game.addVisual(fondoDelMenu)
 //Faltan agregar carteles con la informacion de los personajes: nombre,clase, estadisticas y si se puede una explicacion de su habilidad
 
 self.inicializar()
