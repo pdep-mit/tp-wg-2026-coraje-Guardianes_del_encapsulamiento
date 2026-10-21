@@ -20,6 +20,6 @@ const generadores = [nuevoHombreCalabaza,nuevoHombreZapallo,nuevoGranjero,nuevoE
 
 
 method crearNuevoPersonaje(personaje,equipo)
-{  const nuevoPersonaje = generadores.find({generador => generador.nombre() == personaje.nombre()}).creador().apply(equipo.nombre())
+{  const nuevoPersonaje = generadores.find({generador => generador.nombre() == personaje.nombre()}).creador().apply(equipo)
    return nuevoPersonaje
 }}

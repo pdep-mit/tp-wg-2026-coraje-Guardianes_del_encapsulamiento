@@ -7,7 +7,7 @@ import seleccionador.*
 class Personaje { // clase base de personajes
  
   var property position 
-  const nombre
+  const property nombre
   var property puedeMover = false
   var property puedeAtacar = false
   var property equipo
@@ -122,7 +122,7 @@ class Personaje { // clase base de personajes
   }
 
   method image(){
-    return nombre + equipo + ".png"
+    return nombre + equipo.sufijoImagen() + ".png"
   }
 
 }
@@ -179,7 +179,6 @@ class Medico inherits Personaje (){
 
 
 class HombreCalabaza inherits Tanque (nombre = "HombreCalabaza",vida = 140, vidaMaxima = 140, ataqueBase = 20, alcanceBase = 2, defensaBase = 1) { // clase de personaje, faltan agregar habilidades y cosas que lo diferencien
- 
 
  method habilidadPersonaje(){
   const apuntado = seleccionador.seleccionarObjetivo()

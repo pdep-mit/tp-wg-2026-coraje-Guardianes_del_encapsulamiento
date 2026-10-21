@@ -5,6 +5,8 @@ class Equipo {
   var property indice = 0 
   var property turnoActivo = false 
   const property nombre
+
+  method sufijoImagen() = nombre
   
   method agregarPersonajeaEquipo (persona) { // agrega un personaje a un equipo
    integrantes.add(persona)
