@@ -14,7 +14,6 @@ object turnManager{
     seleccionador.cambioDeHuesped(equipo.integrantesVivos(equipo.integrantes()).get(0)) // se cambia el seleccionador al primer integrante vivo del siguiente equipo
     equipo.turnoActivo(true) // se activa el turno del equipo
    
-  
   }
 
   method finDeTurno(equipo)
@@ -56,7 +55,7 @@ object turnManager{
     rondaFinalizada = true
     game.say(seleccionador,
       "Equipo " + equipoEliminado.nombre() + " Eliminado, Equipo Ganador: " + equipoGanador.nombre())
-    game.schedule(2000, {self.reiniciarPartida()})
+    game.schedule(3000, {self.reiniciarPartida()})
   }
 
   method reiniciarPartida() {

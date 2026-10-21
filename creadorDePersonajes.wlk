@@ -18,6 +18,7 @@ const nuevoKillerBunny = new CreadorDePersonajes(nombre = "KillerBunny",creador 
 const nuevoLoboSniper = new CreadorDePersonajes(nombre = "LoboSniper",creador = {nuevoEquipo => new LoboSniper(position = game.center(), equipo = nuevoEquipo )})
 const generadores = [nuevoHombreCalabaza,nuevoHombreZapallo,nuevoGranjero,nuevoEspantaPajaros,nuevaVacaMedico,nuevaOvejaMedica,nuevoKillerBunny,nuevoLoboSniper]
 
+// TODO  modif logica para que sea mas expresiva
 
 method crearNuevoPersonaje(personaje,equipo)
 {  const nuevoPersonaje = generadores.find({generador => generador.nombre() == personaje.nombre()}).creador().apply(equipo)
