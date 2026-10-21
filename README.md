@@ -1,13 +1,13 @@
 # Wollok Game: Título de juego
 
-**Grupo:** Nombre de Grupo
+**Grupo:** Guardianes del Encapsulamiento
 
 **Integrantes:**
-- Nombre y Apellido
-- Nombre y Apellido
-- Nombre y Apellido
-- Nombre y Apellido
-- Nombre y Apellido
+- Rodrigo Maximiliano Flor
+- José Manuel Varela
+- Juan Francisco Aldaco
+- Julio Enrique Patiño Parra
+- Federico Agustín Gigena
 
 ## Consignas
 
