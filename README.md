@@ -30,20 +30,31 @@ TODO
 --[Menu de seleccion de personajes]--
 
 Flecha Arriba: Anterior Personaje
+
 Flecha Abajo: Siguiente Personaje
+
 Enter: Confirmación de elección
+
 C: Retroceder en la selección
 
 --[ Partida ]--
 
 WASD: Mover el cursor 
+
 Enter: Confirmar acción (mover personaje,atacar,uso de habilidad)
+
 Alt: Cambio de personaje
+
 Barra de espacio: Pasar Turno
+
 Numero 1: Habilidad de personaje
+
 Numero 2: Habilidad de Clase
+
 I: Recorrer inventario
+
 O: Seleccionar Item
+
 U: Utilizar Item
 
 # Explicaciones
