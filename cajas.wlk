@@ -28,12 +28,7 @@ class CajaDeRecompensa {
 
 object generadorDeCajas{
 
-const posicionesPosibles = [
-  game.at(7,3),
-  game.at(7,11),
-  game.at(17,3),
-  game.at(17,11)
-]
+const property posicionesPosibles = []
 const cajasActivas = []
 
 method generarCaja(){

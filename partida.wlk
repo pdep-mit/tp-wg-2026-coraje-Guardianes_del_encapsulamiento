@@ -6,34 +6,25 @@ import ManagerDeTurnos.*
 import Items.*
 import cajas.*
 import obstaculos.*
-
+import niveles.*
 object partida {
 
     method iniciar(){
-
-       const paredCentral = new Pared(position = game.at(12,7))
-       const paredSuperior = new Pared(position = game.at(12,4))
-       const paredInferior = new Pared(position = game.at(12,10))
-       game.addVisual(paredCentral)
-       game.addVisual(paredSuperior)
-       game.addVisual(paredInferior)
        
-       equipoAzul.integrantes().get(0).position(game.at(4,4))
-       equipoAzul.integrantes().get(1).position(game.at(4,6))
-       equipoAzul.integrantes().get(2).position(game.at(4,8))
-       equipoAzul.integrantes().get(3).position(game.at(4,10))
-       equipoRojo.integrantes().get(0).position(game.at(20,4))
-       equipoRojo.integrantes().get(1).position(game.at(20,6))
-       equipoRojo.integrantes().get(2).position(game.at(20,8))
-       equipoRojo.integrantes().get(3).position(game.at(20,10))
-
-      
-       equipoAzul.integrantes().forEach({integrante => game.addVisual(integrante)})
-       equipoRojo.integrantes().forEach({integrante => game.addVisual(integrante)})
-      
        seleccionador.cambioDeHuesped(equipoAzul.integrantes().get(0))
-       game.addVisual(seleccionador)
+       console.println("gola")
+       generadorDeNiveles.iniciar(nivel1,managerDeEquipos.equipos())
+       console.println("gola")
+       console.println("gola")
        turnManager.inicioDeTurno(equipoAzul)
+
+      self.configurarTeclas()
+
+
+    }
+      
+      
+    method configurarTeclas (){
 
        keyboard.left().onPressDo({seleccionador.mover(seleccionador.position().left(1))})
        keyboard.right().onPressDo({seleccionador.mover(seleccionador.position().right(1))})
@@ -50,15 +41,11 @@ object partida {
 
        keyboard.u().onPressDo({seleccionador.huesped().usarObjeto()})
 
-       keyboard.c().onPressDo({generadorDeCajas.generarCaja()})
-
        keyboard.num1().onPressDo({seleccionador.activarHabilidadClase()})
 
        keyboard.num2().onPressDo({seleccionador.activarHabilidadPersonaje()})
 
-       keyboard.num0().onPressDo({turnManager.pasoDeTurno()}) // pasamos turno de un equipo a otro
-
-
-    }
+       keyboard.space().onPressDo({turnManager.pasoDeTurno()}) // pasamos turno de un equipo a otro   
+      }
 }
 

@@ -24,7 +24,7 @@ object seleccionador {
   }
   method quitarCasillasDisponibles(){
      casillas.forEach({casilla => casillas.remove(casilla)})
-     casillasDisponibles.forEach({casillaDisponible => game.removeVisual(casillaDisponible)  casillasDisponibles.remove(casillaDisponible)})
+     casillasDisponibles.forEach({casillaDisponible => game.removeVisual(casillaDisponible) casillasDisponibles.remove(casillaDisponible) })
   }
 
   method casillasDisponibles (){

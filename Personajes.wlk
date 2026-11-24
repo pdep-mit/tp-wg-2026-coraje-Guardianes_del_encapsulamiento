@@ -8,8 +8,8 @@ class Personaje { // clase base de personajes
  
   var property position 
   const property nombre
-  var property puedeMover = false
-  var property puedeAtacar = false
+  var property puedeMover = true
+  var property puedeAtacar = true
   var property equipo
   var property vida 
   const property vidaMaxima
