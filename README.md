@@ -23,11 +23,24 @@ Recuerden que para cada checkpoint hay [expectativas mínimas](https://docs.goog
 
 ## Objetivo
 
-TODO
+Riego Cruzado es un juego multijugador 1vs1 de estrategia por turnos, en el que el objetivo es ganarle a tu rival derrotando a todos sus personajes. 
+
+--[Menu de selección de personajes]--
+
+Al comenzar el juego cada uno de los jugadores eligirá su equipo de 4 de una lista de 8 personajes, los cuales se dividen en 4 clases distintas: Soldado, Tanque, Sniper y Medico. Cada una de estas clases tienen estadisticas acorde a su función, además de esto cada personaje tiene tanto una habilidad por su clase como una habilidad unica de su personaje
+
+--[ Partida ]--
+
+Una vez comenzada la partida cada equipo se turna para manejar a sus personajes, estos pueden moverse y atacar en un rombo que delimita su alcance, finalizadas sus acciones presionas la tecla Alt para cambiar al siguiente personaje y manejarlo, cuando ya no queden personajes por mover pasas el turno con la barra espaciadora.
+
+Los personajes tambien pueden recolectar cajas de items, las cuales generaran una recompensa aleatoria, variando entre consumibles que recuperan salud a granadas que causan un gran daño a todos los que esten en su radio de explosión. Para usar estos items el personaje se lo guarda en un inventario que puede recorrer con la tecla I, equiparse un item con la tecla O y luego usarlos cuando quieras con la tecla U
+
+Para finalizar la partida uno de los equipos debe eliminar a todos los personajes del equipo rival, con lo cual se determina al ganador del juego
+
 
 ## Controles
 
---[Menu de seleccion de personajes]--
+--[Menu de selección de personajes]--
 
 Flecha Arriba: Anterior Personaje
 
