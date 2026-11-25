@@ -12,10 +12,7 @@ object partida {
     method iniciar(){
        
        seleccionador.cambioDeHuesped(equipoAzul.integrantes().get(0))
-       console.println("gola")
-       generadorDeNiveles.iniciar(nivel1,managerDeEquipos.equipos())
-       console.println("gola")
-       console.println("gola")
+       generadorDeNiveles.iniciar(nivel1)
        turnManager.inicioDeTurno(equipoAzul)
 
       self.configurarTeclas()

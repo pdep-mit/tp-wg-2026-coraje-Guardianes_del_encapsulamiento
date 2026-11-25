@@ -29,7 +29,7 @@ object turnManager{
 
    turno += 1
    game.say(seleccionador,"turno:" + turno)
-   if (turno % 4 == 0) {
+   if (turno % 2 == 0) {
      generadorDeCajas.generarCaja() //generamos una caja aleatoria cada 4 turnos
    }
    }

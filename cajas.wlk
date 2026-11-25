@@ -32,8 +32,8 @@ const property posicionesPosibles = []
 const cajasActivas = []
 
 method generarCaja(){
-  if (cajasActivas.size() >= 3) {
-    return null //no puede haber mas de 3 cajas activas al mismo tiempo
+  if (cajasActivas.size() >= 6) {
+    return null //no puede haber mas de 6 cajas activas al mismo tiempo
   }
   const posicionesLibres = posicionesPosibles.filter({posicion =>
     not cajasActivas.any({caja => caja.position() == posicion})
