@@ -33,12 +33,12 @@ object generadorDeNiveles {
       spawnersCajas.forEach({casilla => generadorDeCajas.posicionesPosibles().add(casilla)  })
    }
 
- method generarPersonajes(spawnersAzul,spawnersRojo,equipo1,equipo2){
+ method generarPersonajes(spawnersAzul,spawnersRojo,equipoAzul,equipoRojo){
       const rango = (0..3)
-      rango.forEach({indice => equipo1.get(indice).mover(spawnersAzul.get(indice))})
-      rango.forEach({indice => equipo2.get(indice).mover(spawnersRojo.get(indice))})
-      equipo1.forEach({integrante => game.addVisual(integrante)})
-      equipo2.forEach({integrante => game.addVisual(integrante)})
+      rango.forEach({indice => equipoAzul.get(indice).mover(spawnersAzul.get(indice))})
+      rango.forEach({indice => equipoRojo.get(indice).mover(spawnersRojo.get(indice))})
+      equipoAzul.forEach({integrante => game.addVisual(integrante)})
+      equipoRojo.forEach({integrante => game.addVisual(integrante)})
      
    }
 

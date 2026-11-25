@@ -9,28 +9,21 @@ object turnManager{
    var turno = 1
    var rondaFinalizada = false
   
-  method inicioDeTurno(equipo){
-    equipo.iniciarTurno()
-    seleccionador.cambioDeHuesped(equipo.integrantesVivos(equipo.integrantes()).get(0)) // se cambia el seleccionador al primer integrante vivo del siguiente equipo
-    equipo.turnoActivo(true) // se activa el turno del equipo
-   
-  }
+  method inicioDeTurno(equipo){ equipo.iniciarTurno() }
 
-  method finDeTurno(equipo)
-  { equipo.integrantes().forEach({jugador => jugador.puedeMover(false)}) 
-    equipo.integrantes().forEach({jugador => jugador.puedeAtacar(false)}) // se cancela la capacidad de moverse y de atacar de cada integrante
-    equipo.turnoActivo(false)}
+  method finDeTurno(equipo) {equipo.finalizarTurno()}
+     
     
   method pasoDeTurno() 
   {
    if (not rondaFinalizada) {
    self.finDeTurno(self.turnoDe()) // se termina el turno del equipo activo
    self.inicioDeTurno(managerDeEquipos.recorrerEquipos()) // empieza el turno del siguiente equipo
-
    turno += 1
+  
    game.say(seleccionador,"turno:" + turno)
    if (turno % 2 == 0) {
-     generadorDeCajas.generarCaja() //generamos una caja aleatoria cada 4 turnos
+     generadorDeCajas.generarCaja() //generamos una caja aleatoria cada 2 turnos
    }
    }
   }
@@ -40,18 +33,17 @@ object turnManager{
     }
 
   method verificarFinDeRonda() {
-    if (not rondaFinalizada and managerDeEquipos.equipos().size() > 1) {
+    
       const equipoEliminado = managerDeEquipos.equipos().find({equipo => equipo.estaEliminado()})
       if (equipoEliminado != null) {
-        const equipoGanador = managerDeEquipos.equipos().find({equipo => not equipo.estaEliminado()})
+      const equipoGanador = managerDeEquipos.equipos().find({equipo => not equipo.estaEliminado()})
         if (equipoGanador != null) {
-          self.finalizarRonda(equipoEliminado, equipoGanador)
-        }
+          self.finalizarPartida(equipoEliminado, equipoGanador)
+        } 
       }
-    }
   }
 
-  method finalizarRonda(equipoEliminado, equipoGanador) {
+  method finalizarPartida(equipoEliminado, equipoGanador) {
     rondaFinalizada = true
     game.say(seleccionador,
       "Equipo " + equipoEliminado.nombre() + " Eliminado, Equipo Ganador: " + equipoGanador.nombre())

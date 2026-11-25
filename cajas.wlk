@@ -32,22 +32,17 @@ const property posicionesPosibles = []
 const cajasActivas = []
 
 method generarCaja(){
-  if (cajasActivas.size() >= 6) {
-    return null //no puede haber mas de 6 cajas activas al mismo tiempo
-  }
-  const posicionesLibres = posicionesPosibles.filter({posicion =>
-    not cajasActivas.any({caja => caja.position() == posicion})
-  })
-  if (posicionesLibres.isEmpty()) {
-    return null
-  }
-  const caja = new CajaDeRecompensa(
-    item = generadorDeItems.generarItem(),
-    position = posicionesLibres.anyOne())
-  cajasActivas.add(caja)
-  game.addVisual(caja)
-  return caja
-}
+  
+  const posicionesLibres = posicionesPosibles.filter({posicion => not cajasActivas.any({caja => caja.position() == posicion}) 
+       and not(game.getObjectsIn(posicion).any({objeto => objeto.solido()}))})
+
+  if (cajasActivas.size() < 6 and not posicionesLibres.isEmpty()) {
+      const caja = new CajaDeRecompensa(
+      item = generadorDeItems.generarItem(),
+      position = posicionesLibres.anyOne())
+      cajasActivas.add(caja)
+      game.addVisual(caja)
+}}
 
 method quitarCaja(caja) {
   cajasActivas.remove(caja)

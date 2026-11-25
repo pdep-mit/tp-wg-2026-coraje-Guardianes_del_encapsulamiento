@@ -44,6 +44,11 @@ class Personaje { // clase base de personajes
     puedeAtacar = true
   }
 
+  method finalizarTurno(){
+    puedeAtacar = false
+    puedeMover = false
+  }
+
   method curarse(cantidad) {
     vida = vidaMaxima.min(vida + cantidad)
   }
@@ -99,14 +104,17 @@ class Personaje { // clase base de personajes
      item.duenio(self)
   }
 
-  method recorrerInventario() {return auxiliar.siguienteDeLaLista(inventario,self)}
+  method recorrerInventario() { 
+     auxiliar.siguienteDeLaLista(inventario,self)
+     if(not inventario.isEmpty()){
+     game.say(self,"Item: " + inventario.get(indice).nombre())}else{game.say(self,"Mi inventario está vacio")}      }
   
 
   method recolectarAlgo(recompensa)  { self.agregarItemAlInventario(recompensa.generarRecompensa())}
   
   method equiparObjeto() 
    {objetoEquipado = inventario.get(indice)
-     game.say(self,"me equipe con:" + objetoEquipado.nombre())}
+     game.say(self,"Me equipé con:" + objetoEquipado.nombre())}
   
 
   method usarObjeto() {
@@ -135,13 +143,16 @@ class Personaje { // clase base de personajes
 
  
 
+
 class Soldado inherits Personaje (){
 
   method habilidadClase(){
     if(puedeMover){
     const buffAlcance = {personaje,buffo => personaje.alcance(personaje.alcance() + buffo)}
     self.buffarse(buffAlcance,2)
-    cooldownHabilidadClase = 2}
+    cooldownHabilidadClase = 2
+    game.say(self,"Subi mi alcance en 2")}
+  
   }
 }
 class Tanque inherits Personaje (){
@@ -151,6 +162,7 @@ class Tanque inherits Personaje (){
   
     self.buffarse(buffDefensa,1)
     cooldownHabilidadClase = 2
+    game.say(self,"Subi mi defensa en 1")
    }
 }
 
@@ -162,6 +174,7 @@ class Sniper inherits Personaje (){
      if (puedeMover and puedeAtacar) {
       self.buffarse(buffAtaque,10)
       puedeMover = false
+      game.say(self,"Subi mi ataque en 10")
      }
    }
 }
@@ -172,6 +185,7 @@ class Medico inherits Personaje (){
       const companiero = game.getObjectsIn(seleccionador.position()).find({objeto => objeto.vivo()})
       companiero.curarse(35)
       cooldownHabilidadClase = 2
+      game.say(self,"Cure a mi compañero en 35")
      }
    }
    method hayUnCompaniero(){
@@ -192,6 +206,7 @@ class HombreCalabaza inherits Tanque (nombre = "HombreCalabaza",vida = 140, vida
     apuntado.recibirDanio(ataque*3)
     puedeAtacar = false
     cooldownHabilidadPersonaje = 2
+
   }
  }
 
@@ -204,6 +219,7 @@ class HombreZapallo inherits Tanque (nombre = "HombreZapallo",vida = 160, vidaMa
   method habilidadPersonaje(){
        aliados.forEach({aliado =>  aliado.buffarse(buffDefensa,1)})
        cooldownHabilidadPersonaje = 4
+       game.say(self,"Todos mis compañeros subieron 1 de defensa")
   }
 }
 
@@ -217,7 +233,9 @@ class Granjero inherits Soldado (nombre = "Granjero",vida = 100, vidaMaxima = 10
    objetivo.recibirDanio(ataque-10)
    puedeAtacar = false
    usoHabilidad -= 1
-   if (usoHabilidad < 1){cooldownHabilidadPersonaje = 2  usoHabilidad = 2  seleccionador.quitarCasillasDisponibles()}
+   if (usoHabilidad == 1){
+   game.say(self,"Usé mi primer ataque, ¡Aún me queda uno más!")}
+   else (usoHabilidad < 1){cooldownHabilidadPersonaje = 2  usoHabilidad = 2  seleccionador.quitarCasillasDisponibles()}
  }
 }
 
@@ -229,6 +247,7 @@ class EspantaPajaros inherits Soldado (nombre = "EspantaPajaros",vida = 110, vid
      objetoEquipado = granadaDeBolsillo
      self.usarObjeto()
      cooldownHabilidadPersonaje = 3
+     game.say(self,"Lancé mi confiable granada de bolsillo")
  }
 
  
@@ -245,6 +264,7 @@ class LoboSniper inherits Sniper(nombre = "LoboSniper",vida = 90, vidaMaxima = 9
       puedeMover = false
       seleccionador.quitarCasillasDisponibles()
       cooldownHabilidadPersonaje = 3
+      game.say(self,"Acerté un disparo certero")
     }
   }
 }
@@ -258,6 +278,7 @@ class KillerBunny inherits Sniper(nombre = "KillerBunny",vida = 80, vidaMaxima =
   if((apuntado.position().x()  -position.x()).abs() + (apuntado.position().y() - position.y()).abs()  <= 1){
     apuntado.recibirDanio(vida*3)
     self.recibirDanio(vida)
+    game.say(self,"Nos fuimo")
   }
 
    }
@@ -271,6 +292,7 @@ class VacaMedico inherits Medico (nombre = "VacaMedico",vida = 100, vidaMaxima =
    const companiero =  seleccionador.seleccionarObjetivo()
    companiero.buffarse(companiero.ataque(),15)
    cooldownHabilidadPersonaje = 2
+   game.say(self,"Subi el ataque de mi compañero en 15")
    }
  }
 
@@ -284,7 +306,7 @@ class OvejaMedica inherits Medico(nombre = "OvejaMedica",vida = 100, vidaMaxima 
    const companiero =  seleccionador.seleccionarObjetivo()
    companiero.buffarse(companiero.alcance(),1)
    cooldownHabilidadPersonaje = 2
-   }
+   game.say(self,"Subí el alcance de mi compañero en 1") }
    }
 
   

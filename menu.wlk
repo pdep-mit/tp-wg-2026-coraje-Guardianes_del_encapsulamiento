@@ -5,11 +5,15 @@ import equipos.*
 import partida.*
 import auxiliares.*
 import elementosVisuales.*
+
+
+
 object menu {
 var iteracionesMenu = 0
 const ruedasSeleccionadoras = [rueda1,rueda2,rueda3,rueda4]
 var property indice = 0
 var ruedaActiva = rueda1
+
 
 var elegidos = []
 var contadorElegidos = 0
@@ -21,9 +25,12 @@ method iniciar(equipo){
 const cartelExplicativo = new Cartel(text = "Elige los integrantes de tu equipo",position = game.center().up(3),textColor ="FFFFFF")
 const cartelDeEquipo = new Cartel(text = "Equipo " + equipo.nombre(),position = game.center().up(2),textColor = "FFFFFF")
 
+
+
 game.addVisual(fondoDelMenu)
 game.addVisual(cartelExplicativo)
 game.addVisual(cartelDeEquipo)
+
 //Faltan agregar carteles con la informacion de los personajes: nombre,clase, estadisticas y si se puede una explicacion de su habilidad
 
 self.inicializar()

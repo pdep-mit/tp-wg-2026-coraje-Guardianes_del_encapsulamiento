@@ -69,7 +69,7 @@ object seleccionador {
   method moverHuesped() = self.huesped().mover(position) // mueve al huesped a la posicion del seleccionador
   
 
-  method hayUnObjetivo(posicion)  {return game.getObjectsIn(posicion).any({objeto=>objeto.objetivoElegible()})} // busca un objetivo elegible en la posicion del seleccionador
+  method hayUnObjetivo(posicion)  {return game.getObjectsIn(posicion).any({objeto=>objeto.objetivoElegible() and objeto != huesped})} // busca un objetivo elegible en la posicion del seleccionador
   
   method hayUnRecolectable(posicion){return game.getObjectsIn(posicion).any({objeto=>objeto.recolectable()})}
 
@@ -83,7 +83,9 @@ object seleccionador {
   }
 
   method seleccionarObjetivo (){ 
-      return game.getObjectsIn(self.position()).find({objeto => objeto.objetivoElegible() and objeto != huesped})} 
+      const objetivo = game.getObjectsIn(self.position()).find({objeto => objeto.objetivoElegible() and objeto != huesped})
+      if (objetivo != null){return objetivo} else
+      return null}
 
   method hayLineaDeAtaque(objetivo) {
     const origen = huesped.position()

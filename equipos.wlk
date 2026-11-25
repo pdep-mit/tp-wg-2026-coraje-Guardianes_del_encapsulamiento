@@ -11,8 +11,16 @@ class Equipo {
   
   method iniciarTurno(){
     self.integrantesVivos(integrantes).forEach({jugador => jugador.iniciarTurno()}) 
-    seleccionador.cambioDeHuesped(self.integrantesVivos(integrantes).get(0))
+    const primero = self.integrantesVivos(integrantes).get(0)
+    seleccionador.cambioDeHuesped(primero)
+    turnoActivo = true // se activa el turno del equipo
   }
+
+  method finalizarTurno(){
+    integrantes.forEach({jugador => jugador.finalizarTurno()}) // se cancela la capacidad de moverse y de atacar de cada integrante
+    turnoActivo = false}
+
+  
 
   method agregarPersonajeaEquipo (persona) { // agrega un personaje a un equipo
    integrantes.add(persona)
@@ -55,7 +63,6 @@ object managerDeEquipos {
     equipos.forEach({equipo => equipo.reiniciar()})
     indice = 0
   }
-
 }
 
  const equipoAzul = new Equipo(nombre = "Azul") 
