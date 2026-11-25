@@ -1,6 +1,6 @@
 class Cartel{
 
- const property text
+ var property text
  const property position
  const property textColor
 

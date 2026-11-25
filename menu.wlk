@@ -18,7 +18,10 @@ var ruedaActiva = rueda1
 var elegidos = []
 var contadorElegidos = 0
 
-
+const cartelNombreClase = new Cartel(text = "", position = game.center().down(3), textColor = "FFFFFF")
+const cartelEstadisticas = new Cartel(text = "", position = game.center().down(4), textColor = "FFFFFF")
+const cartelHabilidad = new Cartel(text = "", position = game.center().down(5), textColor = "FFFFFF")
+const cartelHabilidadClase = new Cartel(text = "", position = game.center().down(6),textColor = "FFFFFF")
 
 method iniciar(equipo){
 
@@ -30,6 +33,10 @@ const cartelDeEquipo = new Cartel(text = "Equipo " + equipo.nombre(),position = 
 game.addVisual(fondoDelMenu)
 game.addVisual(cartelExplicativo)
 game.addVisual(cartelDeEquipo)
+game.addVisual( cartelNombreClase)
+game.addVisual (cartelEstadisticas)
+game.addVisual(cartelHabilidad)
+game.addVisual(cartelHabilidadClase)
 
 //Faltan agregar carteles con la informacion de los personajes: nombre,clase, estadisticas y si se puede una explicacion de su habilidad
 
@@ -37,21 +44,34 @@ self.inicializar()
 
 ruedasSeleccionadoras.forEach({rueda => rueda.inicializar()})
 
-keyboard.up().onPressDo({ruedaActiva.moverArriba()})
-keyboard.down().onPressDo({ruedaActiva.moverAbajo()})
+self.actualizarInfo() // Carga los datos del primer personaje al iniciar
+
+keyboard.up().onPressDo({ruedaActiva.moverArriba() self.actualizarInfo()})
+keyboard.down().onPressDo({ruedaActiva.moverAbajo() self.actualizarInfo()})
 
 keyboard.enter().onPressDo({if(contadorElegidos <= 3 and contadorElegidos >= 0){self.elegir()} else self.finalizar(equipo) })
 keyboard.c().onPressDo({self.cancelar()})
 
 }
 
+
+method actualizarInfo() {
+    const seleccionado = ruedaActiva.seleccionar()
+    cartelNombreClase.text(seleccionado.nombre() + " - Clase: " + seleccionado.clase())
+    cartelEstadisticas.text(seleccionado.estadisticas())
+    cartelHabilidad.text("Habilidad: " + seleccionado.habilidad())
+    cartelHabilidadClase.text("Habilidad De Clase: " + seleccionado.habilidadClase())}
+
+
 method siguienteRueda(){
     
     ruedaActiva = auxiliar.siguienteDeLaLista(ruedasSeleccionadoras,self)
+    self.actualizarInfo()
 }
 
 method anteriorRueda(){
     ruedaActiva = auxiliar.anteriorDeLaLista(ruedasSeleccionadoras,self)
+    self.actualizarInfo()
 }
 
 method elegir(){

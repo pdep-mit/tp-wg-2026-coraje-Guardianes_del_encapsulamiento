@@ -183,9 +183,9 @@ class Medico inherits Personaje (){
    method habilidadClase(){
      if(self.hayUnCompaniero()) {
       const companiero = game.getObjectsIn(seleccionador.position()).find({objeto => objeto.vivo()})
-      companiero.curarse(35)
-      cooldownHabilidadClase = 2
-      game.say(self,"Cure a mi compañero en 35")
+      companiero.curarse(40)
+      cooldownHabilidadClase = 3
+      game.say(self,"Cure a mi compañero en 40")
      }
    }
    method hayUnCompaniero(){
@@ -288,9 +288,10 @@ class KillerBunny inherits Sniper(nombre = "KillerBunny",vida = 80, vidaMaxima =
 class VacaMedico inherits Medico (nombre = "VacaMedico",vida = 100, vidaMaxima = 100, ataqueBase = 20, alcanceBase = 3,defensaBase = 1 ) {
   
   method habilidadPersonaje(){
+   const buffAtaque = {personaje, buffo => personaje.ataque(personaje.ataque() + buffo) } 
    if(self.hayUnCompaniero()) {
    const companiero =  seleccionador.seleccionarObjetivo()
-   companiero.buffarse(companiero.ataque(),15)
+   companiero.buffarse(buffAtaque,15)
    cooldownHabilidadPersonaje = 2
    game.say(self,"Subi el ataque de mi compañero en 15")
    }
