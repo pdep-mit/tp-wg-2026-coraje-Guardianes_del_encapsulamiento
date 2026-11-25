@@ -4,6 +4,7 @@ import juego.*
 import equipos.*
 import auxiliares.*
 import seleccionador.*
+import Items.*
 class Personaje { // clase base de personajes
  
   var property position 
@@ -25,8 +26,6 @@ class Personaje { // clase base de personajes
   const property solido = true
   const property recolectable = false
   
-  var property buffosActivos = []
-
   var property inventario = []
   var property indice = 0
   var property objetoEquipado = null
@@ -146,9 +145,10 @@ class Soldado inherits Personaje (){
   }
 }
 class Tanque inherits Personaje (){
+    const buffDefensa = {personaje, buffo => personaje.defensa(personaje.defensa() + buffo)}
 
    method habilidadClase(){
-    const buffDefensa = {personaje, buffo => personaje.defensa(personaje.defensa() + buffo)}
+  
     self.buffarse(buffDefensa,1)
     cooldownHabilidadClase = 2
    }
@@ -156,9 +156,10 @@ class Tanque inherits Personaje (){
 
 class Sniper inherits Personaje (){
 
+   const buffAtaque = {personaje, buffo => personaje.ataque(personaje.ataque() + buffo) }
+   
    method habilidadClase(){
      if (puedeMover and puedeAtacar) {
-      const buffAtaque = {personaje, buffo => personaje.ataque(personaje.ataque() + buffo) }
       self.buffarse(buffAtaque,10)
       puedeMover = false
      }
@@ -190,6 +191,7 @@ class HombreCalabaza inherits Tanque (nombre = "HombreCalabaza",vida = 140, vida
   if((apuntado.position().x()  -position.x()).abs() + (apuntado.position().y() - position.y()).abs()  <= 1){
     apuntado.recibirDanio(ataque*3)
     puedeAtacar = false
+    cooldownHabilidadPersonaje = 2
   }
  }
 
@@ -197,14 +199,17 @@ class HombreCalabaza inherits Tanque (nombre = "HombreCalabaza",vida = 140, vida
 }
 
 class HombreZapallo inherits Tanque (nombre = "HombreZapallo",vida = 160, vidaMaxima = 160, ataqueBase = 15, alcanceBase = 2, defensaBase = 1 ){
-
+   const aliados = equipo.integrantesVivos()
+   
   method habilidadPersonaje(){
-
+       aliados.forEach({aliado =>  aliado.buffarse(buffDefensa,1)})
+       cooldownHabilidadPersonaje = 4
   }
 }
 
  
 class Granjero inherits Soldado (nombre = "Granjero",vida = 100, vidaMaxima = 100, ataqueBase = 25, alcanceBase = 3,defensaBase = 1) {
+  
   var usoHabilidad = 2
 
  method habilidadPersonaje(){
@@ -212,34 +217,50 @@ class Granjero inherits Soldado (nombre = "Granjero",vida = 100, vidaMaxima = 10
    objetivo.recibirDanio(ataque-10)
    puedeAtacar = false
    usoHabilidad -= 1
-   if (usoHabilidad < 1){cooldownHabilidadPersonaje = 2  usoHabilidad = 2}
+   if (usoHabilidad < 1){cooldownHabilidadPersonaje = 2  usoHabilidad = 2  seleccionador.quitarCasillasDisponibles()}
  }
 }
 
 class EspantaPajaros inherits Soldado (nombre = "EspantaPajaros",vida = 110, vidaMaxima = 110, ataqueBase = 25, alcanceBase = 3, defensaBase = 1){
  
+  const granadaDeBolsillo = new Granada(nombre = "granadaDeBolsillo",danio = 20, area = 2,usabilidad = 1,calidad = 1)
+
  method habilidadPersonaje(){
-   
+     objetoEquipado = granadaDeBolsillo
+     self.usarObjeto()
+     cooldownHabilidadPersonaje = 3
  }
 
  
 
 }
 
-class LoboSniper inherits Sniper(nombre = "LoboSniper",vida = 80, vidaMaxima = 80, ataqueBase = 40, alcanceBase = 4,defensaBase = 1){
+class LoboSniper inherits Sniper(nombre = "LoboSniper",vida = 90, vidaMaxima = 90, ataqueBase = 35, alcanceBase = 4,defensaBase = 1){
    
-   method habilidadPersonaje(){
-
-
-
-   }
+   method habilidadPersonaje() {
+    const objetivo = seleccionador.seleccionarObjetivo()
+    if (puedeAtacar and objetivo != null and objetivo.equipo() != equipo) {
+      objetivo.recibirDanio((ataque+10) * objetivo.defensa()  )
+      puedeAtacar = false
+      puedeMover = false
+      seleccionador.quitarCasillasDisponibles()
+      cooldownHabilidadPersonaje = 3
+    }
+  }
 }
 
 
-class KillerBunny inherits Sniper(nombre = "KillerBunny",vida = 90, vidaMaxima = 90, ataqueBase = 35, alcanceBase = 4,defensaBase = 1)
+class KillerBunny inherits Sniper(nombre = "KillerBunny",vida = 80, vidaMaxima = 80, ataqueBase = 40, alcanceBase = 4,defensaBase = 1)
 
 {
-  method habilidadPersonaje(){  }
+  method habilidadPersonaje(){ 
+         const apuntado = seleccionador.seleccionarObjetivo()
+  if((apuntado.position().x()  -position.x()).abs() + (apuntado.position().y() - position.y()).abs()  <= 1){
+    apuntado.recibirDanio(vida*3)
+    self.recibirDanio(vida)
+  }
+
+   }
 
 }
 
@@ -258,7 +279,13 @@ class VacaMedico inherits Medico (nombre = "VacaMedico",vida = 100, vidaMaxima =
 
 class OvejaMedica inherits Medico(nombre = "OvejaMedica",vida = 100, vidaMaxima = 100, ataqueBase = 15, alcanceBase = 4, defensaBase = 1) {
 
-   method habilidadPersonaje(){}
+   method habilidadPersonaje(){
+       if(self.hayUnCompaniero()) {
+   const companiero =  seleccionador.seleccionarObjetivo()
+   companiero.buffarse(companiero.alcance(),1)
+   cooldownHabilidadPersonaje = 2
+   }
+   }
 
   
 }

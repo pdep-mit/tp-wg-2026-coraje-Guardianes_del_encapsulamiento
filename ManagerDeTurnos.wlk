@@ -10,7 +10,7 @@ object turnManager{
    var rondaFinalizada = false
   
   method inicioDeTurno(equipo){
-    equipo.integrantesVivos(equipo.integrantes()).forEach({jugador => jugador.iniciarTurno()}) 
+    equipo.iniciarTurno()
     seleccionador.cambioDeHuesped(equipo.integrantesVivos(equipo.integrantes()).get(0)) // se cambia el seleccionador al primer integrante vivo del siguiente equipo
     equipo.turnoActivo(true) // se activa el turno del equipo
    

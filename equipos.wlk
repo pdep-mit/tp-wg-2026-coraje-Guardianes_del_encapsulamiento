@@ -1,4 +1,5 @@
 import auxiliares.*
+import seleccionador.*
 
 class Equipo {
   var property integrantes = []
@@ -8,6 +9,11 @@ class Equipo {
 
   method sufijoImagen() = nombre
   
+  method iniciarTurno(){
+    self.integrantesVivos(integrantes).forEach({jugador => jugador.iniciarTurno()}) 
+    seleccionador.cambioDeHuesped(self.integrantesVivos(integrantes).get(0))
+  }
+
   method agregarPersonajeaEquipo (persona) { // agrega un personaje a un equipo
    integrantes.add(persona)
   }

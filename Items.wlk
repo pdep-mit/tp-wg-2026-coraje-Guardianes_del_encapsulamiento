@@ -102,7 +102,7 @@ class Colocable inherits Items {
 }
 
 class BarreraDesplegable inherits Colocable {
- //Que tipo debarrera se crea
+ //Que tipo de barrera se crea
   const property fabrica
 
   override method crearElemento(posicion) = fabrica.apply(posicion, duenio.equipo())
@@ -140,7 +140,6 @@ class MejoraAtaque inherits PowerUp {
 }
 
 class MejoraAlcance inherits PowerUp {
-  // OJO: si el equipo separa alcance de movimiento y de ataque, se ajusta solo esta clase.
   override method aplicarA(personaje) {
     personaje.alcance(personaje.alcance() + mejora)
     personaje.alcanceBase(personaje.alcance())
@@ -158,8 +157,8 @@ object generadorDeItems {
 
   const generadores = [
     
-    { new Curacion(nombre = "Churrasco", calidad = 2, usabilidad = 3, cantidad = 40) },
-    { new Curacion(nombre = "Mate", calidad = 1, usabilidad = 3, cantidad = 15) },
+    { new Curacion(nombre = "Churrasco", calidad = 2, usabilidad = 2, cantidad = 40) },
+    { new Curacion(nombre = "Mate", calidad = 1, usabilidad = 5, cantidad = 15) },
     { new Curacion(nombre = "Botiquin", calidad = 3, usabilidad = 1, cantidad = 80) },
 
     
