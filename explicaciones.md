@@ -95,5 +95,4 @@ method usarItem() {
 Esta decisión nos evita repetir validaciones, feedback visual `(game.say())` y limpieza de inventario en más de diez ítems concretos, también facilita agregar nuevos ítems definiendo solo su efecto y que `Personaje.usarObjeto()` ejecute cualquier `objetoEquipado` solamente enviándole `usarItem()`.
 
 # Diagramas
-
-*Incluír al menos un diagrama para comunicar su solución*
+<img width="1824" height="1679" alt="image" src="https://github.com/user-attachments/assets/fbffff54-e34c-44fb-a05d-dd10796f7d32" />
